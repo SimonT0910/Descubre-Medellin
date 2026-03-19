@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Descubre Medellín - Inicio</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <div class="logo-top">
+                    <img src="images/localizacion.png" alt="logo">
+                    <h1>Descubre Medellín</h1>
+                </div>
+                <p class="logo-subtitle">Los mejores lugares del Valle de Aburrá</p>
+            </div>
+            <nav class="user-nav">
+                <a class="btn-primary">+ Publicar Lugar</a>
+                <div class="profile-icon" id="profileMenu">
+                    <img src="images/perfil.png" alt="perfil">
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <a href="#">Cerrar Sesión</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="search-section">
+            <div class="search-bar">
+                <span>
+                    <img src="images/buscar.png" class="search-icon" alt="buscar">
+                    
+                </span>
+                <input type="text" id="searchInput" placeholder="Buscar por nombre o descripción...">
+            </div>
+            <div class="filters">
+                <select id="filterCategory">
+                    <option value="todas">Todas las categorías</option>
+                    <option value="restaurante">Restaurantes</option>
+                    <option value="cafe">Cafés</option>
+                    <option value="parque">Parques</option>
+                    <option value="bar">Bares</option>
+                    <option value="museo">Museos</option>
+                    <option value="otros">Otros</option>
+                </select>
+                <!-- FILTRO DE PRECIO CORREGIDO -->
+                <select id="filterPrice">
+                    <option value="">Cualquier precio</option>
+                    <option value="$">$ (Económico)</option>
+                    <option value="$$">$$ (Medio)</option>
+                    <option value="$$$">$$$ (Alto)</option>
+                </select>
+            </div>
+        </section>
+
+        <p id="contadorLugares" class="contador">Cargando lugares...</p>
+        
+        <section class="places-grid" id="placesGrid">
+            <!-- Las tarjetas se generan aquí con script.js -->
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

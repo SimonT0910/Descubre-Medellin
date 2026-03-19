@@ -1,0 +1,74 @@
+:root {
+    --primary: #38bdf8;
+    --bg: #0f172a;
+    --bg-secondary: #020617;
+    --card-bg: #1e293b;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body { margin: 0; background: linear-gradient(135deg, #020617, #0f172a, #1e293b, #0ea5e9); background-size: 300% 300%; animation: gradientMove 6s ease infinite; color: var(--text); }
+@keyframes gradientMove { 0% { background-position: 0% 50%; } 25% { background-position: 50% 100%; } 50% { background-position: 100% 50%; } 75% { background-position: 50% 0%; } 100% { background-position: 0% 50%; } }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+/* HEADER */
+.main-header { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 15px 0; position: sticky; top: 0; z-index: 100; }
+.header-content { display: flex; justify-content: space-between; align-items: center; }
+
+/* LOGO */
+.logo { display: flex; flex-direction: column; color: var(--text); }
+.logo-top { display: flex; align-items: center; gap: 8px; }
+.logo-top img { width: 28px; height: 28px; }
+.logo h1 { font-size: 1.4rem; color: var(--text); }
+.logo-suntitle { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+/* NAV */
+.user-nav { display: flex; gap: 15px; align-items: center; }
+
+/* BOTONES */
+.btn-primary { background: var(--primary); color: #000; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+.btn-black { background: #000; color: #fff; width: 100%; padding: 15px; border-radius: 8px; border: none; cursor: pointer; font-size: 1rem; }
+
+/* SEARCH */
+.search-section { margin: 30px 0; }
+.search-bar { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); padding: 12px; border-radius: 10px; display: flex; margin-bottom: 15px; align-items: center; }
+.search-bar input { background: transparent; border: none; width: 100%; outline: none; font-size: 1rem; color: var(--text); }
+.search-icon { width: 18px; height: 18px; margin-right: 8px; }
+
+/* FILTROS */
+.filters { display: flex; gap: 10px; }
+select { padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); background: var(--card-bg); color: var(--text); }
+
+/* GRID DE TARJETAS */
+.contador { margin-bottom: 20px; color: var(--muted); font-size: 0.9rem; }
+.places-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; padding-bottom: 50px; }
+
+.place-card { background: #ffffff; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.05); transition: 0.3s; }
+.place-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(56, 189, 248, 0.2);}
+.card-image img { width: 100%; height: 220px; object-fit: cover; }
+.card-body { padding: 20px; color: #000; }
+.card-body h3 { color: #000; }
+.description { font-size: 0.9rem; color: #555; margin-bottom: 15px; }
+.badge { padding: 4px 10px; border-radius: 5px; font-size: 0.8rem; font-weight: bold; }
+.badge-restaurante { background: #fff3e0; color: #ef6c00; }
+.badge-cafe { background: #fef9e7; color: #f1c40f; }
+.badge-parque { background: #e8f5e9; color: #2e7d32; }
+.badge-bar { background: #fce4ec; color: #ad1457; }
+.badge-museo { background: #e3f2fd; color: #1565c0; }
+.badge-otros { background: #f3e5f5; color: #6a1b9a; }
+
+/* PROFILE ICON */
+.profile-icon { position: relative; cursor: pointer; }
+.profile-icon img { width: 30px; height: 30px; }
+
+/* DROPDOWN */
+.dropdown-menu { position: absolute; top: 45px; right: 0; width: 160px; background: var(--card-bg); border-radius: 10px; padding: 8px 0; display: none; border: 1px solid rgba(255, 255, 255, 0.08);}
+
+/* ACTIVE */
+.dropdown-menu.active { display: block; }
+.user-name { padding: 10px 15px; font-weight: 600; }
+.dropdown-menu hr { border: none; border-top: 1px solid #eee; margin: 5px 0; }
+.dropdown-menu a { display: block; padding: 10px; text-decoration: none; color: var(--text); font-size: 0.9rem; }
+.dropdown-menu a:hover { background: rgba(255, 255, 255, 0.05); }
