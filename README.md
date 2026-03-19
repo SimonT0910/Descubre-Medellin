@@ -1,6 +1,3 @@
-
-<img width="1545" height="1999" alt="Descubre Medellin" src="https://github.com/user-attachments/assets/42222520-e428-473c-b983-c4d37411571e" />
-
 Proyecto: Descubre Medellín:
 Blog interactivo de lugares del Valle de Aburrá
 
