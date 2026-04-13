@@ -1,6 +1,6 @@
 ¿Quién usa el sistema?
 
-Usuarios registrados 
+El sistema cuenta con un único tipo de usuario: el usuario registrado, quien puede registrarse, iniciar sesión, consultar, buscar y filtrar lugares, visualizar sus detalles, publicar nuevos lugares, comentar, calificar, guardar favoritos y gestionar su perfil. No existen roles adicionales en esta versión del sistema.
 
 ¿Qué necesita hacer?
 
