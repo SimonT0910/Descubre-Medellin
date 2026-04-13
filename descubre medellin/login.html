@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Descubre Medellín - Acceso</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <div class="logo-top">
+                    <img src="images/localizacion.png" alt="logo">
+                    <h1>Descubre Medellín</h1>
+                </div>
+                <p class="logo-subtitle">Los mejores lugares del Valle de Aburrá</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container auth-container">
+
+        <!-- TABS -->
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="tabLogin" onclick="mostrarTab('login')">Iniciar Sesión</button>
+            <button class="auth-tab" id="tabRegister" onclick="mostrarTab('register')">Registrarse</button>
+        </div>
+
+        <!-- FORMULARIO LOGIN -->
+        <div class="auth-card" id="formLogin">
+            <h2 class="auth-title">Bienvenido de nuevo</h2>
+            <p class="auth-subtitle">Ingresa con tu cuenta para explorar y publicar lugares</p>
+
+            <div class="form-group">
+                <label for="loginEmail">Correo electrónico</label>
+                <input type="email" id="loginEmail" placeholder="tucorreo@email.com">
+                <span class="error-msg" id="errorLoginEmail"></span>
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Contraseña</label>
+                <div class="password-wrap">
+                    <input type="password" id="loginPassword" placeholder="Tu contraseña">
+                    <button class="btn-toggle-pass" onclick="togglePass('loginPassword', this)" type="button">👁</button>
+                </div>
+                <span class="error-msg" id="errorLoginPass"></span>
+            </div>
+
+            <span class="error-msg auth-error-global" id="errorLoginGlobal"></span>
+            <button class="btn-primary btn-auth" onclick="iniciarSesion()">Iniciar Sesión</button>
+            <p class="auth-switch">¿No tienes cuenta? <a onclick="mostrarTab('register')">Regístrate aquí</a></p>
+        </div>
+
+        <!-- FORMULARIO REGISTRO -->
+        <div class="auth-card" id="formRegister" style="display:none">
+            <h2 class="auth-title">Crear cuenta</h2>
+            <p class="auth-subtitle">Únete y empieza a compartir tus lugares favoritos</p>
+
+            <div class="form-group">
+                <label for="regNombre">Nombre completo <span class="required">*</span></label>
+                <input type="text" id="regNombre" placeholder="Tu nombre" maxlength="60">
+                <span class="error-msg" id="errorRegNombre"></span>
+            </div>
+            <div class="form-group">
+                <label for="regEmail">Correo electrónico <span class="required">*</span></label>
+                <input type="email" id="regEmail" placeholder="tucorreo@email.com">
+                <span class="error-msg" id="errorRegEmail"></span>
+            </div>
+            <div class="form-group">
+                <label for="regPassword">Contraseña <span class="required">*</span></label>
+                <div class="password-wrap">
+                    <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres">
+                    <button class="btn-toggle-pass" onclick="togglePass('regPassword', this)" type="button">👁</button>
+                </div>
+                <span class="error-msg" id="errorRegPass"></span>
+            </div>
+            <div class="form-group">
+                <label for="regPassword2">Confirmar contraseña <span class="required">*</span></label>
+                <div class="password-wrap">
+                    <input type="password" id="regPassword2" placeholder="Repite la contraseña">
+                    <button class="btn-toggle-pass" onclick="togglePass('regPassword2', this)" type="button">👁</button>
+                </div>
+                <span class="error-msg" id="errorRegPass2"></span>
+            </div>
+
+            <span class="error-msg auth-error-global" id="errorRegGlobal"></span>
+            <button class="btn-primary btn-auth" onclick="registrarUsuario()">Crear cuenta</button>
+            <p class="auth-switch">¿Ya tienes cuenta? <a onclick="mostrarTab('login')">Inicia sesión aquí</a></p>
+        </div>
+
+    </main>
+
+    <script>
+        // Redirigir si ya hay sesión activa
+        if (localStorage.getItem('usuarioActivo')) {
+            window.location.href = 'index.html';
+        }
+
+        function mostrarTab(tab) {
+            document.getElementById('formLogin').style.display = tab === 'login' ? 'flex' : 'none';
+            document.getElementById('formRegister').style.display = tab === 'register' ? 'flex' : 'none';
+            document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+            document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+        }
+
+        function togglePass(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+            else { input.type = 'password'; btn.textContent = '👁'; }
+        }
+
+        function obtenerUsuarios() {
+            return JSON.parse(localStorage.getItem('usuarios') || '[]');
+        }
+
+        function registrarUsuario() {
+            const nombre = document.getElementById('regNombre').value.trim();
+            const email = document.getElementById('regEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('regPassword').value;
+            const pass2 = document.getElementById('regPassword2').value;
+
+            // Limpiar errores
+            ['errorRegNombre','errorRegEmail','errorRegPass','errorRegPass2','errorRegGlobal'].forEach(id => {
+                document.getElementById(id).textContent = '';
+            });
+            ['regNombre','regEmail','regPassword','regPassword2'].forEach(id => {
+                document.getElementById(id).classList.remove('input-error');
+            });
+
+            let valido = true;
+            if (!nombre) { document.getElementById('errorRegNombre').textContent = 'El nombre es obligatorio.'; document.getElementById('regNombre').classList.add('input-error'); valido = false; }
+            if (!email || !email.includes('@')) { document.getElementById('errorRegEmail').textContent = 'Ingresa un correo válido.'; document.getElementById('regEmail').classList.add('input-error'); valido = false; }
+            if (pass.length < 6) { document.getElementById('errorRegPass').textContent = 'Mínimo 6 caracteres.'; document.getElementById('regPassword').classList.add('input-error'); valido = false; }
+            if (pass !== pass2) { document.getElementById('errorRegPass2').textContent = 'Las contraseñas no coinciden.'; document.getElementById('regPassword2').classList.add('input-error'); valido = false; }
+            if (!valido) return;
+
+            const usuarios = obtenerUsuarios();
+            if (usuarios.find(u => u.email === email)) {
+                document.getElementById('errorRegGlobal').textContent = 'Este correo ya está registrado.';
+                return;
+            }
+
+            usuarios.push({ nombre, email, password: pass });
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+
+            // Login automático
+            localStorage.setItem('usuarioActivo', JSON.stringify({ nombre, email }));
+            window.location.href = 'index.html';
+        }
+
+        function iniciarSesion() {
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('loginPassword').value;
+
+            ['errorLoginEmail','errorLoginPass','errorLoginGlobal'].forEach(id => {
+                document.getElementById(id).textContent = '';
+            });
+            ['loginEmail','loginPassword'].forEach(id => {
+                document.getElementById(id).classList.remove('input-error');
+            });
+
+            let valido = true;
+            if (!email) { document.getElementById('errorLoginEmail').textContent = 'Ingresa tu correo.'; document.getElementById('loginEmail').classList.add('input-error'); valido = false; }
+            if (!pass) { document.getElementById('errorLoginPass').textContent = 'Ingresa tu contraseña.'; document.getElementById('loginPassword').classList.add('input-error'); valido = false; }
+            if (!valido) return;
+
+            const usuarios = obtenerUsuarios();
+            const usuario = usuarios.find(u => u.email === email && u.password === pass);
+            if (!usuario) {
+                document.getElementById('errorLoginGlobal').textContent = 'Correo o contraseña incorrectos.';
+                return;
+            }
+
+            localStorage.setItem('usuarioActivo', JSON.stringify({ nombre: usuario.nombre, email: usuario.email }));
+            window.location.href = 'index.html';
+        }
+    </script>
+
+</body>
+</html>
