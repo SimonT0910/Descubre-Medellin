@@ -31,7 +31,6 @@
         <div class="auth-card" id="formLogin">
             <h2 class="auth-title">Bienvenido de nuevo</h2>
             <p class="auth-subtitle">Ingresa con tu cuenta para explorar y publicar lugares</p>
-
             <div class="form-group">
                 <label for="loginEmail">Correo electrónico</label>
                 <input type="email" id="loginEmail" placeholder="tucorreo@email.com">
@@ -45,7 +44,6 @@
                 </div>
                 <span class="error-msg" id="errorLoginPass"></span>
             </div>
-
             <span class="error-msg auth-error-global" id="errorLoginGlobal"></span>
             <button class="btn-primary btn-auth" onclick="iniciarSesion()">Iniciar Sesión</button>
             <p class="auth-switch">¿No tienes cuenta? <a onclick="mostrarTab('register')">Regístrate aquí</a></p>
@@ -55,7 +53,6 @@
         <div class="auth-card" id="formRegister" style="display:none">
             <h2 class="auth-title">Crear cuenta</h2>
             <p class="auth-subtitle">Únete y empieza a compartir tus lugares favoritos</p>
-
             <div class="form-group">
                 <label for="regNombre">Nombre completo <span class="required">*</span></label>
                 <input type="text" id="regNombre" placeholder="Tu nombre" maxlength="60">
@@ -82,7 +79,6 @@
                 </div>
                 <span class="error-msg" id="errorRegPass2"></span>
             </div>
-
             <span class="error-msg auth-error-global" id="errorRegGlobal"></span>
             <button class="btn-primary btn-auth" onclick="registrarUsuario()">Crear cuenta</button>
             <p class="auth-switch">¿Ya tienes cuenta? <a onclick="mostrarTab('login')">Inicia sesión aquí</a></p>
@@ -105,8 +101,13 @@
 
         function togglePass(inputId, btn) {
             const input = document.getElementById(inputId);
-            if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
-            else { input.type = 'password'; btn.textContent = '👁'; }
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁';
+            }
         }
 
         function obtenerUsuarios() {
@@ -120,18 +121,35 @@
             const pass2 = document.getElementById('regPassword2').value;
 
             // Limpiar errores
-            ['errorRegNombre','errorRegEmail','errorRegPass','errorRegPass2','errorRegGlobal'].forEach(id => {
+            ['errorRegNombre', 'errorRegEmail', 'errorRegPass', 'errorRegPass2', 'errorRegGlobal'].forEach(id => {
                 document.getElementById(id).textContent = '';
             });
-            ['regNombre','regEmail','regPassword','regPassword2'].forEach(id => {
+            ['regNombre', 'regEmail', 'regPassword', 'regPassword2'].forEach(id => {
                 document.getElementById(id).classList.remove('input-error');
             });
 
             let valido = true;
-            if (!nombre) { document.getElementById('errorRegNombre').textContent = 'El nombre es obligatorio.'; document.getElementById('regNombre').classList.add('input-error'); valido = false; }
-            if (!email || !email.includes('@')) { document.getElementById('errorRegEmail').textContent = 'Ingresa un correo válido.'; document.getElementById('regEmail').classList.add('input-error'); valido = false; }
-            if (pass.length < 6) { document.getElementById('errorRegPass').textContent = 'Mínimo 6 caracteres.'; document.getElementById('regPassword').classList.add('input-error'); valido = false; }
-            if (pass !== pass2) { document.getElementById('errorRegPass2').textContent = 'Las contraseñas no coinciden.'; document.getElementById('regPassword2').classList.add('input-error'); valido = false; }
+
+            if (!nombre) {
+                document.getElementById('errorRegNombre').textContent = 'El nombre es obligatorio.';
+                document.getElementById('regNombre').classList.add('input-error');
+                valido = false;
+            }
+            if (!email || !email.includes('@')) {
+                document.getElementById('errorRegEmail').textContent = 'Ingresa un correo válido.';
+                document.getElementById('regEmail').classList.add('input-error');
+                valido = false;
+            }
+            if (pass.length < 6) {
+                document.getElementById('errorRegPass').textContent = 'Mínimo 6 caracteres.';
+                document.getElementById('regPassword').classList.add('input-error');
+                valido = false;
+            }
+            if (pass !== pass2) {
+                document.getElementById('errorRegPass2').textContent = 'Las contraseñas no coinciden.';
+                document.getElementById('regPassword2').classList.add('input-error');
+                valido = false;
+            }
             if (!valido) return;
 
             const usuarios = obtenerUsuarios();
@@ -152,20 +170,30 @@
             const email = document.getElementById('loginEmail').value.trim().toLowerCase();
             const pass = document.getElementById('loginPassword').value;
 
-            ['errorLoginEmail','errorLoginPass','errorLoginGlobal'].forEach(id => {
+            ['errorLoginEmail', 'errorLoginPass', 'errorLoginGlobal'].forEach(id => {
                 document.getElementById(id).textContent = '';
             });
-            ['loginEmail','loginPassword'].forEach(id => {
+            ['loginEmail', 'loginPassword'].forEach(id => {
                 document.getElementById(id).classList.remove('input-error');
             });
 
             let valido = true;
-            if (!email) { document.getElementById('errorLoginEmail').textContent = 'Ingresa tu correo.'; document.getElementById('loginEmail').classList.add('input-error'); valido = false; }
-            if (!pass) { document.getElementById('errorLoginPass').textContent = 'Ingresa tu contraseña.'; document.getElementById('loginPassword').classList.add('input-error'); valido = false; }
+
+            if (!email) {
+                document.getElementById('errorLoginEmail').textContent = 'Ingresa tu correo.';
+                document.getElementById('loginEmail').classList.add('input-error');
+                valido = false;
+            }
+            if (!pass) {
+                document.getElementById('errorLoginPass').textContent = 'Ingresa tu contraseña.';
+                document.getElementById('loginPassword').classList.add('input-error');
+                valido = false;
+            }
             if (!valido) return;
 
             const usuarios = obtenerUsuarios();
             const usuario = usuarios.find(u => u.email === email && u.password === pass);
+
             if (!usuario) {
                 document.getElementById('errorLoginGlobal').textContent = 'Correo o contraseña incorrectos.';
                 return;

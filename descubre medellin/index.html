@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+ 
     <header class="main-header">
         <div class="container header-content">
             <div class="logo">
@@ -16,19 +17,21 @@
                 <p class="logo-subtitle">Los mejores lugares del Valle de Aburrá</p>
             </div>
             <nav class="user-nav">
-            <button class="btn-primary" id="btnPublicar">+ Publicar Lugar</button>
-            <div class="profile-icon" id="profileMenu">
-                 <img src="images/perfil.png" alt="perfil">
-                 <span class="user-nombre-header" id="userNombreHeader"></span>
-            <div class="dropdown-menu" id="dropdownMenu">
-                <span class="dropdown-user-info" id="dropdownUserInfo"></span>
-                 <a href="#" id="btnCerrarSesion">Cerrar Sesión</a>
+                <button class="btn-primary" id="btnPublicar">+ Publicar Lugar</button>
+                <div class="profile-icon" id="profileMenu">
+                    <img src="images/perfil.png" alt="perfil">
+                    <span class="user-nombre-header" id="userNombreHeader"></span>
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <span class="dropdown-user-info" id="dropdownUserInfo"></span>
+                        <a href="#" id="btnCerrarSesion">Cerrar Sesión</a>
+                    </div>
+                </div>
+            </nav>
         </div>
-    </div>
-</nav>
     </header>
-
+ 
     <main class="container">
+ 
         <section class="search-section">
             <div class="search-bar">
                 <span><img src="images/buscar.png" class="search-icon" alt="buscar"></span>
@@ -51,11 +54,12 @@
                     <option value="$$$">$$$ (Alto)</option>
                 </select>
                 <button class="btn-favoritos-toggle" id="btnVerFavoritos">
-                    <span class="fav-icon-btn">❤️</span> Favoritos <span class="fav-badge" id="favBadge">0</span>
+                    <span class="fav-icon-btn">❤️</span> Favoritos
+                    <span class="fav-badge" id="favBadge">0</span>
                 </button>
             </div>
         </section>
-
+ 
         <!-- PANEL FAVORITOS -->
         <div class="favoritos-panel" id="favoritosPanel" style="display:none">
             <div class="favoritos-header">
@@ -66,11 +70,12 @@
                 <p class="sin-favoritos">Aún no has guardado ningún lugar.</p>
             </div>
         </div>
-
+ 
         <p id="contadorLugares" class="contador">Cargando lugares...</p>
         <section class="places-grid" id="placesGrid"></section>
+ 
     </main>
-
+ 
     <!-- MODAL PUBLICAR LUGAR -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
@@ -133,7 +138,7 @@
             </div>
         </div>
     </div>
-
+ 
     <!-- MODAL DETALLES -->
     <div class="modal-overlay" id="modalDetalles">
         <div class="modal modal-detalles">
@@ -155,7 +160,6 @@
                     <p class="detalle-ubicacion">📍 <span id="detalleUbicacion"></span></p>
                     <p class="detalle-estrellas" id="detalleEstrellas"></p>
                 </div>
-
                 <div class="comentarios-section">
                     <h3 class="comentarios-titulo">Comentarios</h3>
                     <div class="comentarios-lista" id="comentariosLista">
@@ -176,71 +180,91 @@
             </div>
         </div>
     </div>
-
-    <script src="script.js"></script>
-
+ 
+    <script type="module" src="MVC/main.js"></script>
+ 
     <!-- MODAL EDITAR LUGAR -->
-<div class="modal-overlay" id="modalEditar">
-    <div class="modal">
-        <div class="modal-header">
-            <h2>Editar lugar</h2>
-            <button class="modal-close" id="editarClose">&times;</button>
-        </div>
-        <div class="modal-body">
-            <input type="hidden" id="editarId">
-            <div class="form-group">
-                <label for="editarNombre">Nombre del lugar <span class="required">*</span></label>
-                <input type="text" id="editarNombre" placeholder="Ej: Café El Patio" required maxlength="80">
-                <span class="error-msg" id="editarErrorNombre"></span>
+    <div class="modal-overlay" id="modalEditar">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Editar lugar</h2>
+                <button class="modal-close" id="editarClose">&times;</button>
             </div>
-            <div class="form-group">
-                <label for="editarCategoria">Categoría <span class="required">*</span></label>
-                <select id="editarCategoria" required>
-                    <option value="">Selecciona una categoría</option>
-                    <option value="restaurante">Restaurante</option>
-                    <option value="cafe">Café</option>
-                    <option value="parque">Parque</option>
-                    <option value="bar">Bar</option>
-                    <option value="museo">Museo</option>
-                    <option value="otros">Otros</option>
-                </select>
-                <span class="error-msg" id="editarErrorCategoria"></span>
-            </div>
-            <div class="form-group">
-                <label for="editarDescripcion">Descripción <span class="required">*</span></label>
-                <textarea id="editarDescripcion" placeholder="Describe el lugar brevemente..." required maxlength="200" rows="3"></textarea>
-                <span class="char-count" id="editarCharCount">0 / 200</span>
-                <span class="error-msg" id="editarErrorDescripcion"></span>
-            </div>
-            <div class="form-group">
-                <label for="editarUbicacion">Ubicación <span class="required">*</span></label>
-                <input type="text" id="editarUbicacion" placeholder="Ej: Laureles, Medellín" required maxlength="100">
-                <span class="error-msg" id="editarErrorUbicacion"></span>
-            </div>
-            <div class="form-group">
-                <label for="editarPrecio">Rango de precio <span class="required">*</span></label>
-                <select id="editarPrecio" required>
-                    <option value="">Selecciona un rango</option>
-                    <option value="$">$ — Económico</option>
-                    <option value="$$">$$ — Medio</option>
-                    <option value="$$$">$$$ — Alto</option>
-                </select>
-                <span class="error-msg" id="editarErrorPrecio"></span>
-            </div>
-            <div class="form-group">
-                <label for="editarImagen">URL de imagen</label>
-                <input type="url" id="editarImagen" placeholder="https://images.unsplash.com/...">
-                <span class="error-msg" id="editarErrorImagen"></span>
-                <div class="image-preview-wrap" id="editarImagePreviewWrap">
-                    <img id="editarImagePreview" src="" alt="Vista previa">
+            <div class="modal-body">
+                <input type="hidden" id="editarId">
+                <div class="form-group">
+                    <label for="editarNombre">Nombre del lugar <span class="required">*</span></label>
+                    <input type="text" id="editarNombre" placeholder="Ej: Café El Patio" required maxlength="80">
+                    <span class="error-msg" id="editarErrorNombre"></span>
                 </div>
-            </div>
-            <div class="form-actions">
-                <button class="btn-cancel" id="editarCancelar">Cancelar</button>
-                <button class="btn-primary" id="editarGuardar">Guardar cambios</button>
+                <div class="form-group">
+                    <label for="editarCategoria">Categoría <span class="required">*</span></label>
+                    <select id="editarCategoria" required>
+                        <option value="">Selecciona una categoría</option>
+                        <option value="restaurante">Restaurante</option>
+                        <option value="cafe">Café</option>
+                        <option value="parque">Parque</option>
+                        <option value="bar">Bar</option>
+                        <option value="museo">Museo</option>
+                        <option value="otros">Otros</option>
+                    </select>
+                    <span class="error-msg" id="editarErrorCategoria"></span>
+                </div>
+                <div class="form-group">
+                    <label for="editarDescripcion">Descripción <span class="required">*</span></label>
+                    <textarea id="editarDescripcion" placeholder="Describe el lugar brevemente..." required maxlength="200" rows="3"></textarea>
+                    <span class="char-count" id="editarCharCount">0 / 200</span>
+                    <span class="error-msg" id="editarErrorDescripcion"></span>
+                </div>
+                <div class="form-group">
+                    <label for="editarUbicacion">Ubicación <span class="required">*</span></label>
+                    <input type="text" id="editarUbicacion" placeholder="Ej: Laureles, Medellín" required maxlength="100">
+                    <span class="error-msg" id="editarErrorUbicacion"></span>
+                </div>
+                <div class="form-group">
+                    <label for="editarPrecio">Rango de precio <span class="required">*</span></label>
+                    <select id="editarPrecio" required>
+                        <option value="">Selecciona un rango</option>
+                        <option value="$">$ — Económico</option>
+                        <option value="$$">$$ — Medio</option>
+                        <option value="$$$">$$$ — Alto</option>
+                    </select>
+                    <span class="error-msg" id="editarErrorPrecio"></span>
+                </div>
+                <div class="form-group">
+                    <label for="editarImagen">URL de imagen</label>
+                    <input type="url" id="editarImagen" placeholder="https://images.unsplash.com/...">
+                    <span class="error-msg" id="editarErrorImagen"></span>
+                    <div class="image-preview-wrap" id="editarImagePreviewWrap">
+                        <img id="editarImagePreview" src="" alt="Vista previa">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-cancel" id="editarCancelar">Cancelar</button>
+                    <button class="btn-primary" id="editarGuardar">Guardar cambios</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+        <!-- MODAL FAVORITOS -->
+        <div class="modal-overlay" id="modalFavoritos">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>❤️ Mis Lugares Favoritos</h2>
+                    <button class="modal-close" id="favoritosClose">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="favoritos-modal-lista" id="favoritosModalLista">
+                        <p class="sin-favoritos">Aún no has guardado ningún lugar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="module" src="MVC/main.js"></script>
+    </body>
+    </html>
+ 
 </body>
 </html>
