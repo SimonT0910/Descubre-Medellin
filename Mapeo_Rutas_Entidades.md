@@ -11,6 +11,7 @@
 | Login | `/login` | POST | `/auth/login` | Autentica al usuario y genera el token. |
 | Comentar | (En detalle) | POST | `/lugares/:id/comentarios` | Registra una opinión y calificación. |
 | Favoritos | `/favoritos` | POST | `/lugares/:id/favoritos` | Guarda el lugar en la lista personal del usuario. |
+| Editar lugar | `/editar` | PUT | `/lugares/:id` | Actualiza la información de un lugar existente. |
 
 #### B. Entidades de la Base de Datos
 
