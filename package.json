@@ -1,0 +1,21 @@
+{
+  "name": "descubre-medellin",
+  "version": "1.0.0",
+  "description": "Proyecto: Descubre Medellín:\r Blog interactivo de lugares del Valle de Aburrá",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SimonT0910/Descubre-Medellin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/SimonT0910/Descubre-Medellin/issues"
+  },
+  "homepage": "https://github.com/SimonT0910/Descubre-Medellin#readme"
+}
