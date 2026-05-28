@@ -1,8 +1,6 @@
 const KEY_LUGARES = "lugares";
 const KEY_FAVORITOS = "favoritos";
 
-print("Holis")
-
 // Lugares fijos de la pagina
 const lugaresIniciales = [
     {
