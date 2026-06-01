@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "id": "1780336718347",
+    "nombre": "Brahyan",
+    "email": "brahyan@test.com",
+    "password": "$2b$10$cEYQpNO4t5TIK4dkemIlYusrcYYLS9YKivkG0jKovZzPqUkHkdzUy",
+    "fecha": "2026-06-01T17:58:38.347Z"
+  }
+]

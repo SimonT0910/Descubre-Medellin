@@ -3,6 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const lugaresRoutes = require('./routes/lugares');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/lugares', lugaresRoutes);
+app.use('/api/auth', authRoutes);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

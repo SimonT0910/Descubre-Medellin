@@ -1,1 +1,28 @@
-[]
+[
+  {
+    "id": "1",
+    "nombre": "Parque Lleras",
+    "categoria": "parque",
+    "descripcion": "Zona de entretenimiento popular en El Poblado.",
+    "ubicacion": "El Poblado, Medellín",
+    "precio": "$$$",
+    "imagen": "https://visitarmedellin.com/wp-content/uploads/2023/01/Portada-Parque-Lleras.jpg",
+    "usuario": "",
+    "rating": 0,
+    "comentarios": [],
+    "fecha": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "nombre": "Restaurante Hacienda",
+    "categoria": "restaurante",
+    "descripcion": "Comida típica colombiana en un ambiente acogedor.",
+    "ubicacion": "Laureles, Medellín",
+    "precio": "$$",
+    "imagen": "https://haciendaorigen.com/wp-content/uploads/2024/10/5-1024x1024.jpg",
+    "usuario": "",
+    "rating": 0,
+    "comentarios": [],
+    "fecha": "2024-01-02T00:00:00.000Z"
+  }
+]

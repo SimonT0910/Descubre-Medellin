@@ -1,9 +1,10 @@
 import { 
-    obtenerLugares, 
+    obtenerLugares,
+    guardarNuevoLugar,
+    actualizarLugar,
+    agregarComentario,
     obtenerFavoritos, 
-    toggleFavorito, 
-    guardarLugares,
-    actualizarLugar 
+    toggleFavorito
 } from "../Models/lugarModel.js";
 import { 
     renderizarLugares, 
@@ -11,27 +12,23 @@ import {
 } from "../Views/appView.js";
 
 let lugarActualEnDetalle = null;
+let todosLosLugares = [];
 
-export function initApp() {
+export async function initApp() {
     console.log("APP INICIADA");
     verificarSesion();
-    cargarLugares();
+    await cargarLugares();
     configurarEventListeners();
 }
 
 function configurarEventListeners() {
-    // BUSCADOR Y FILTROS
     document.getElementById("searchInput")?.addEventListener("input", filtrarLugares);
     document.getElementById("filterCategory")?.addEventListener("change", filtrarLugares);
     document.getElementById("filterPrice")?.addEventListener("change", filtrarLugares);
 
-    // FAVORITOS - AHORA ABRE MODAL
     document.getElementById("btnVerFavoritos")?.addEventListener("click", abrirModalFavoritos);
-
-    // CERRAR SESIÓN
     document.getElementById("btnCerrarSesion")?.addEventListener("click", cerrarSesion);
 
-    // DROPDOWN PERFIL
     document.getElementById("profileMenu")?.addEventListener("click", (e) => {
         e.stopPropagation();
         const menu = document.getElementById("dropdownMenu");
@@ -43,19 +40,11 @@ function configurarEventListeners() {
         if (menu) menu.style.display = "none";
     });
 
-    // MODAL PUBLICAR
     configurarModalPublicar();
-    
-    // MODAL DETALLES
     configurarModalDetalles();
-    
-    // MODAL EDITAR
     configurarModalEditar();
-    
-    // MODAL FAVORITOS
     configurarModalFavoritos();
 
-    // USUARIO HEADER
     const user = JSON.parse(localStorage.getItem("usuarioActivo"));
     if (user) {
         const nombreHeader = document.getElementById("userNombreHeader");
@@ -85,7 +74,6 @@ function configurarModalFavoritos() {
 function abrirModalFavoritos() {
     const modal = document.getElementById("modalFavoritos");
     if (!modal) return;
-    
     renderizarModalFavoritos();
     modal.classList.add("active");
     document.body.style.overflow = "hidden";
@@ -95,9 +83,8 @@ function renderizarModalFavoritos() {
     const lista = document.getElementById("favoritosModalLista");
     if (!lista) return;
 
-    const lugares = obtenerLugares();
     const favIds = obtenerFavoritos();
-    const favoritos = lugares.filter(l => favIds.includes(Number(l.id)));
+    const favoritos = todosLosLugares.filter(l => favIds.includes(Number(l.id)));
 
     if (favoritos.length === 0) {
         lista.innerHTML = '<p class="sin-favoritos">Aún no has guardado ningún lugar.</p>';
@@ -105,30 +92,27 @@ function renderizarModalFavoritos() {
     }
 
     lista.innerHTML = favoritos.map(l => `
-        <div class="fav-item" style="display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #eee;">
-            <div class="fav-item-img" style="width: 60px; height: 60px; margin-right: 15px;">
+        <div class="fav-item" style="display:flex;align-items:center;padding:15px;border-bottom:1px solid #eee;">
+            <div style="width:60px;height:60px;margin-right:15px;">
                 ${l.imagen
-                    ? `<img src="${l.imagen}" alt="${l.nombre}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">`
-                    : ''}
-                <div class="fav-item-noimg" style="display: ${l.imagen ? 'none' : 'flex'}; width: 100%; height: 100%; background: #f0f0f0; border-radius: 8px; align-items: center; justify-content: center;">📍</div>
+                    ? `<img src="${l.imagen}" alt="${l.nombre}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" onerror="this.style.display='none'">`
+                    : `<div style="width:100%;height:100%;background:#f0f0f0;border-radius:8px;display:flex;align-items:center;justify-content:center;">📍</div>`
+                }
             </div>
-            <div class="fav-item-info" style="flex: 1;">
-                <span class="fav-item-nombre" style="font-weight: bold; display: block;">${l.nombre}</span>
-                <span class="fav-item-meta" style="font-size: 14px; color: #666;">${l.ubicacion || ''} · ${l.precio || ''}</span>
+            <div style="flex:1;">
+                <span style="font-weight:bold;display:block;">${l.nombre}</span>
+                <span style="font-size:14px;color:#666;">${l.ubicacion || ''} · ${l.precio || ''}</span>
             </div>
-            <div class="fav-item-acciones" style="display: flex; gap: 10px;">
-                <button class="fav-item-ver btn-primary" data-id="${l.id}" style="padding: 8px 15px;">Ver</button>
-                <button class="fav-item-quitar" data-id="${l.id}" style="padding: 8px 12px; background: none; border: none; font-size: 18px; cursor: pointer;" title="Quitar">✕</button>
+            <div style="display:flex;gap:10px;">
+                <button class="fav-item-ver btn-primary" data-id="${l.id}" style="padding:8px 15px;">Ver</button>
+                <button class="fav-item-quitar" data-id="${l.id}" style="padding:8px 12px;background:none;border:none;font-size:18px;cursor:pointer;">✕</button>
             </div>
         </div>
     `).join('');
 
-    // Event listeners
     lista.querySelectorAll('.fav-item-ver').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const id = Number(btn.dataset.id);
-            const lugar = favoritos.find(l => Number(l.id) === id);
+        btn.addEventListener('click', () => {
+            const lugar = favoritos.find(l => String(l.id) === String(btn.dataset.id));
             if (lugar) {
                 document.getElementById("modalFavoritos").classList.remove("active");
                 document.body.style.overflow = "";
@@ -138,11 +122,9 @@ function renderizarModalFavoritos() {
     });
 
     lista.querySelectorAll('.fav-item-quitar').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const id = Number(btn.dataset.id);
-            manejarFavorito(id);
-            renderizarModalFavoritos(); // Actualizar el modal inmediatamente
+        btn.addEventListener('click', () => {
+            manejarFavorito(Number(btn.dataset.id));
+            renderizarModalFavoritos();
         });
     });
 }
@@ -158,16 +140,15 @@ function configurarModalPublicar() {
 
     document.getElementById("modalClose")?.addEventListener("click", cerrarModalPublicar);
     document.getElementById("btnCancelar")?.addEventListener("click", cerrarModalPublicar);
-    
+
     modal.addEventListener("click", (e) => {
         if (e.target === modal) cerrarModalPublicar();
     });
 
-    document.getElementById("btnGuardar")?.addEventListener("click", guardarNuevoLugar);
+    document.getElementById("btnGuardar")?.addEventListener("click", guardarNuevoLugarHandler);
 
     document.getElementById("inputDescripcion")?.addEventListener("input", (e) => {
-        const count = e.target.value.length;
-        document.getElementById("charCount").textContent = `${count} / 200`;
+        document.getElementById("charCount").textContent = `${e.target.value.length} / 200`;
     });
 
     document.getElementById("inputImagen")?.addEventListener("input", (e) => {
@@ -231,7 +212,7 @@ function configurarModalEditar() {
         }
     });
 
-    document.getElementById("editarGuardar")?.addEventListener("click", guardarEdicionLugar);
+    document.getElementById("editarGuardar")?.addEventListener("click", guardarEdicionLugarHandler);
 
     document.getElementById("editarDescripcion")?.addEventListener("input", (e) => {
         document.getElementById("editarCharCount").textContent = `${e.target.value.length} / 200`;
@@ -253,24 +234,15 @@ function configurarModalEditar() {
 }
 
 function cerrarModalPublicar() {
-    const modal = document.getElementById("modalOverlay");
-    modal.classList.remove("active");
+    document.getElementById("modalOverlay").classList.remove("active");
     document.body.style.overflow = "";
-    limpiarFormularioPublicar();
-}
-
-function limpiarFormularioPublicar() {
-    ['inputNombre', 'inputDescripcion', 'inputImagen', 'inputCategoria', 'inputUbicacion', 'inputPrecio']
-        .forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.value = "";
-        });
-    
+    ['inputNombre','inputDescripcion','inputImagen','inputCategoria','inputUbicacion','inputPrecio']
+        .forEach(id => { const el = document.getElementById(id); if (el) el.value = ""; });
     document.getElementById("charCount").textContent = "0 / 200";
     document.getElementById("imagePreviewWrap").style.display = "none";
 }
 
-function guardarNuevoLugar() {
+async function guardarNuevoLugarHandler() {
     const nombre = document.getElementById("inputNombre").value.trim();
     const categoria = document.getElementById("inputCategoria").value;
     const descripcion = document.getElementById("inputDescripcion").value.trim();
@@ -284,48 +256,37 @@ function guardarNuevoLugar() {
     }
 
     const user = JSON.parse(localStorage.getItem("usuarioActivo"));
-    const lugares = obtenerLugares();
-    
-    const nuevoLugar = {
-        id: Date.now(),
-        nombre,
-        categoria,
-        descripcion,
-        ubicacion,
-        precio,
-        imagen,
-        usuario: user.email,
-        comentarios: []
-    };
 
-    lugares.push(nuevoLugar);
-    guardarLugares(lugares);
-    
-    cerrarModalPublicar();
-    cargarLugares();
+    try {
+        await guardarNuevoLugar({ nombre, categoria, descripcion, ubicacion, precio, imagen, usuario: user?.email });
+        cerrarModalPublicar();
+        await cargarLugares();
+    } catch (err) {
+        alert("Error al publicar el lugar. ¿Está el servidor corriendo?");
+    }
 }
 
-function cargarLugares() {
-    const lugares = obtenerLugares();
-    const favoritos = obtenerFavoritos();
-    
-    document.getElementById("contadorLugares").textContent = `${lugares.length} lugares encontrados`;
-    
-    renderizarLugares(lugares, favoritos, verDetalle, manejarFavorito, abrirModalEditar);
-    actualizarBadgeFavoritos(favoritos.length);
+async function cargarLugares() {
+    try {
+        todosLosLugares = await obtenerLugares();
+        const favoritos = obtenerFavoritos();
+        document.getElementById("contadorLugares").textContent = `${todosLosLugares.length} lugares encontrados`;
+        renderizarLugares(todosLosLugares, favoritos, verDetalle, manejarFavorito, abrirModalEditar);
+        actualizarBadgeFavoritos(favoritos.length);
+    } catch (err) {
+        document.getElementById("contadorLugares").textContent = "Error al cargar lugares";
+        console.error(err);
+    }
 }
 
 function filtrarLugares() {
     const texto = document.getElementById("searchInput").value.toLowerCase();
     const categoria = document.getElementById("filterCategory").value;
     const precio = document.getElementById("filterPrice").value;
-
-    let lugares = obtenerLugares();
     const favoritos = obtenerFavoritos();
 
-    const filtrados = lugares.filter(l => {
-        const matchTexto = l.nombre.toLowerCase().includes(texto) || 
-                          l.descripcion.toLowerCase().includes(texto);
+    const filtrados = todosLosLugares.filter(l => {
+        const matchTexto = l.nombre.toLowerCase().includes(texto) || l.descripcion.toLowerCase().includes(texto);
         const matchCategoria = categoria === "todas" || l.categoria === categoria;
         const matchPrecio = !precio || l.precio === precio;
         return matchTexto && matchCategoria && matchPrecio;
@@ -343,7 +304,7 @@ function manejarFavorito(id) {
 
 function verDetalle(lugar) {
     lugarActualEnDetalle = lugar;
-    
+
     document.getElementById("detalleNombre").textContent = lugar.nombre;
     document.getElementById("detalleCat").textContent = lugar.categoria;
     document.getElementById("detallePrecio").textContent = lugar.precio;
@@ -352,15 +313,12 @@ function verDetalle(lugar) {
 
     const img = document.getElementById("detalleImagen");
     const noImg = document.getElementById("detalleNoImagen");
-    
+
     if (lugar.imagen) {
         img.src = lugar.imagen;
         img.style.display = "block";
         noImg.style.display = "none";
-        img.onerror = () => {
-            img.style.display = "none";
-            noImg.style.display = "flex";
-        };
+        img.onerror = () => { img.style.display = "none"; noImg.style.display = "flex"; };
     } else {
         img.style.display = "none";
         noImg.style.display = "flex";
@@ -368,7 +326,7 @@ function verDetalle(lugar) {
 
     const listaComentarios = document.getElementById("comentariosLista");
     const sinComentarios = document.getElementById("sinComentarios");
-    
+
     if (lugar.comentarios && lugar.comentarios.length > 0) {
         listaComentarios.innerHTML = lugar.comentarios.map(c => `
             <div class="comentario-item">
@@ -389,47 +347,36 @@ function verDetalle(lugar) {
     document.body.style.overflow = "hidden";
 }
 
-function publicarComentario() {
+async function publicarComentario() {
     if (!lugarActualEnDetalle) return;
-    
+
     const autor = document.getElementById("comentarioAutor").value.trim();
     const texto = document.getElementById("comentarioTexto").value.trim();
 
-    if (!texto) {
-        alert("Escribe un comentario");
-        return;
+    if (!texto) { alert("Escribe un comentario"); return; }
+
+    try {
+        const nuevoComentario = await agregarComentario(lugarActualEnDetalle.id, {
+            autor: autor || "Anónimo",
+            texto
+        });
+
+        if (!lugarActualEnDetalle.comentarios) lugarActualEnDetalle.comentarios = [];
+        lugarActualEnDetalle.comentarios.push(nuevoComentario);
+        verDetalle(lugarActualEnDetalle);
+
+        document.getElementById("comentarioAutor").value = "";
+        document.getElementById("comentarioTexto").value = "";
+        document.getElementById("charComentario").textContent = "0 / 300";
+
+        await cargarLugares();
+    } catch (err) {
+        alert("Error al publicar el comentario");
     }
-
-    const lugares = obtenerLugares();
-    const lugar = lugares.find(l => l.id === lugarActualEnDetalle.id);
-    
-    if (!lugar.comentarios) lugar.comentarios = [];
-    
-    const fecha = new Date().toLocaleDateString('es-CO', { 
-        day: '2-digit', 
-        month: 'short', 
-        year: 'numeric' 
-    });
-    
-    lugar.comentarios.push({
-        autor: autor || "Anónimo",
-        texto,
-        fecha
-    });
-
-    guardarLugares(lugares);
-    
-    lugarActualEnDetalle.comentarios = lugar.comentarios;
-    verDetalle(lugarActualEnDetalle);
-    
-    document.getElementById("comentarioAutor").value = "";
-    document.getElementById("comentarioTexto").value = "";
-    document.getElementById("charComentario").textContent = "0 / 300";
 }
 
 function abrirModalEditar(lugar) {
     const user = JSON.parse(localStorage.getItem("usuarioActivo"));
-    
     if (!user || lugar.usuario !== user.email) {
         alert("No tienes permiso para editar este lugar");
         return;
@@ -442,25 +389,19 @@ function abrirModalEditar(lugar) {
     document.getElementById("editarUbicacion").value = lugar.ubicacion;
     document.getElementById("editarPrecio").value = lugar.precio;
     document.getElementById("editarImagen").value = lugar.imagen || "";
-    
     document.getElementById("editarCharCount").textContent = `${lugar.descripcion.length} / 200`;
 
     const wrap = document.getElementById("editarImagePreviewWrap");
     const preview = document.getElementById("editarImagePreview");
-    
-    if (lugar.imagen) {
-        preview.src = lugar.imagen;
-        wrap.style.display = "block";
-    } else {
-        wrap.style.display = "none";
-    }
+    if (lugar.imagen) { preview.src = lugar.imagen; wrap.style.display = "block"; }
+    else { wrap.style.display = "none"; }
 
     document.getElementById("modalEditar").classList.add("active");
     document.body.style.overflow = "hidden";
 }
 
-function guardarEdicionLugar() {
-    const id = Number(document.getElementById("editarId").value);
+async function guardarEdicionLugarHandler() {
+    const id = document.getElementById("editarId").value;
     const nombre = document.getElementById("editarNombre").value.trim();
     const categoria = document.getElementById("editarCategoria").value;
     const descripcion = document.getElementById("editarDescripcion").value.trim();
@@ -473,32 +414,19 @@ function guardarEdicionLugar() {
         return;
     }
 
-    const actualizado = actualizarLugar(id, {
-        nombre,
-        categoria,
-        descripcion,
-        ubicacion,
-        precio,
-        imagen
-    });
-
-    if (actualizado) {
+    try {
+        await actualizarLugar(id, { nombre, categoria, descripcion, ubicacion, precio, imagen });
         document.getElementById("modalEditar").classList.remove("active");
         document.body.style.overflow = "";
-        cargarLugares();
-        
-        if (lugarActualEnDetalle && lugarActualEnDetalle.id === id) {
-            const lugares = obtenerLugares();
-            const lugarActualizado = lugares.find(l => l.id === id);
-            if (lugarActualizado) {
-                verDetalle(lugarActualizado);
-            }
-        }
+        await cargarLugares();
+    } catch (err) {
+        alert("Error al guardar los cambios");
     }
 }
 
 function cerrarSesion() {
     localStorage.removeItem("usuarioActivo");
+    localStorage.removeItem("token");
     window.location.href = "login.html";
 }
 

@@ -12,6 +12,7 @@ function guardarLugares(lugares) {
     fs.writeFileSync(DATA_PATH, JSON.stringify(lugares, null, 2), 'utf-8');
 }
 
+// GET /api/lugares
 exports.getAll = (req, res) => {
     try {
         const lugares = leerLugares();
@@ -21,6 +22,7 @@ exports.getAll = (req, res) => {
     }
 };
 
+// GET /api/lugares/:id
 exports.getOne = (req, res) => {
     try {
         const lugares = leerLugares();
@@ -32,9 +34,10 @@ exports.getOne = (req, res) => {
     }
 };
 
+// POST /api/lugares
 exports.create = (req, res) => {
     try {
-        const { nombre, categoria, descripcion, ubicacion, precio, imagen } = req.body;
+        const { nombre, categoria, descripcion, ubicacion, precio, imagen, usuario } = req.body;
 
         if (!nombre || !categoria || !descripcion || !ubicacion || !precio) {
             return res.status(400).json({ error: 'Faltan campos obligatorios' });
@@ -49,6 +52,7 @@ exports.create = (req, res) => {
             ubicacion,
             precio,
             imagen: imagen || '',
+            usuario: usuario || '',
             rating: 0,
             comentarios: [],
             fecha: new Date().toISOString()
@@ -62,6 +66,7 @@ exports.create = (req, res) => {
     }
 };
 
+// PUT /api/lugares/:id
 exports.update = (req, res) => {
     try {
         const lugares = leerLugares();
@@ -91,6 +96,7 @@ exports.update = (req, res) => {
     }
 };
 
+// DELETE /api/lugares/:id
 exports.remove = (req, res) => {
     try {
         const lugares = leerLugares();
@@ -102,5 +108,36 @@ exports.remove = (req, res) => {
         res.status(200).json({ message: 'Lugar eliminado correctamente' });
     } catch (err) {
         res.status(500).json({ error: 'Error al eliminar el lugar' });
+    }
+};
+
+// POST /api/lugares/:id/comentarios
+exports.addComentario = (req, res) => {
+    try {
+        const lugares = leerLugares();
+        const index = lugares.findIndex(l => l.id === req.params.id);
+        if (index === -1) return res.status(404).json({ error: 'Lugar no encontrado' });
+
+        const { autor, texto } = req.body;
+        if (!texto) return res.status(400).json({ error: 'El comentario no puede estar vacío' });
+
+        const comentario = {
+            id: Date.now().toString(),
+            autor: autor || 'Anónimo',
+            texto,
+            fecha: new Date().toLocaleDateString('es-CO', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            })
+        };
+
+        if (!lugares[index].comentarios) lugares[index].comentarios = [];
+        lugares[index].comentarios.push(comentario);
+
+        guardarLugares(lugares);
+        res.status(201).json(comentario);
+    } catch (err) {
+        res.status(500).json({ error: 'Error al agregar el comentario' });
     }
 };
