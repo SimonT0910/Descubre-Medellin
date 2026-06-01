@@ -39,17 +39,29 @@ exports.create = (req, res) => {
     try {
         const { nombre, categoria, descripcion, ubicacion, precio, imagen, usuario } = req.body;
 
-        if (!nombre || !categoria || !descripcion || !ubicacion || !precio) {
-            return res.status(400).json({ error: 'Faltan campos obligatorios' });
+        if (!nombre || typeof nombre !== 'string' || nombre.trim().length < 3) {
+            return res.status(400).json({ error: 'El nombre debe tener al menos 3 caracteres' });
+        }
+        if (!categoria || !['restaurante','cafe','parque','bar','museo','otros'].includes(categoria)) {
+            return res.status(400).json({ error: 'Categoría inválida' });
+        }
+        if (!descripcion || typeof descripcion !== 'string' || descripcion.trim().length < 10) {
+            return res.status(400).json({ error: 'La descripción debe tener al menos 10 caracteres' });
+        }
+        if (!ubicacion || typeof ubicacion !== 'string' || ubicacion.trim().length < 3) {
+            return res.status(400).json({ error: 'La ubicación debe tener al menos 3 caracteres' });
+        }
+        if (!precio || !['$', '$$', '$$$'].includes(precio)) {
+            return res.status(400).json({ error: 'El precio debe ser $, $$ o $$$' });
         }
 
         const lugares = leerLugares();
         const nuevoLugar = {
             id: Date.now().toString(),
-            nombre,
+            nombre: nombre.trim(),
             categoria,
-            descripcion,
-            ubicacion,
+            descripcion: descripcion.trim(),
+            ubicacion: ubicacion.trim(),
             precio,
             imagen: imagen || '',
             usuario: usuario || '',
@@ -75,16 +87,28 @@ exports.update = (req, res) => {
 
         const { nombre, categoria, descripcion, ubicacion, precio, imagen } = req.body;
 
-        if (!nombre || !categoria || !descripcion || !ubicacion || !precio) {
-            return res.status(400).json({ error: 'Faltan campos obligatorios' });
+        if (!nombre || typeof nombre !== 'string' || nombre.trim().length < 3) {
+            return res.status(400).json({ error: 'El nombre debe tener al menos 3 caracteres' });
+        }
+        if (!categoria || !['restaurante','cafe','parque','bar','museo','otros'].includes(categoria)) {
+            return res.status(400).json({ error: 'Categoría inválida' });
+        }
+        if (!descripcion || typeof descripcion !== 'string' || descripcion.trim().length < 10) {
+            return res.status(400).json({ error: 'La descripción debe tener al menos 10 caracteres' });
+        }
+        if (!ubicacion || typeof ubicacion !== 'string' || ubicacion.trim().length < 3) {
+            return res.status(400).json({ error: 'La ubicación debe tener al menos 3 caracteres' });
+        }
+        if (!precio || !['$', '$$', '$$$'].includes(precio)) {
+            return res.status(400).json({ error: 'El precio debe ser $, $$ o $$$' });
         }
 
         lugares[index] = {
             ...lugares[index],
-            nombre,
+            nombre: nombre.trim(),
             categoria,
-            descripcion,
-            ubicacion,
+            descripcion: descripcion.trim(),
+            ubicacion: ubicacion.trim(),
             precio,
             imagen: imagen || lugares[index].imagen
         };
@@ -119,12 +143,18 @@ exports.addComentario = (req, res) => {
         if (index === -1) return res.status(404).json({ error: 'Lugar no encontrado' });
 
         const { autor, texto } = req.body;
-        if (!texto) return res.status(400).json({ error: 'El comentario no puede estar vacío' });
+
+        if (!texto || typeof texto !== 'string' || texto.trim().length === 0) {
+            return res.status(400).json({ error: 'El comentario no puede estar vacío' });
+        }
+        if (texto.trim().length > 300) {
+            return res.status(400).json({ error: 'El comentario no puede superar 300 caracteres' });
+        }
 
         const comentario = {
             id: Date.now().toString(),
-            autor: autor || 'Anónimo',
-            texto,
+            autor: autor?.trim() || 'Anónimo',
+            texto: texto.trim(),
             fecha: new Date().toLocaleDateString('es-CO', {
                 day: '2-digit',
                 month: 'short',

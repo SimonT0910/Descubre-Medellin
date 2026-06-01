@@ -19,5 +19,12 @@
     "email": "bry@gmail.com",
     "password": "$2b$10$vcTq1jM3qDXfmZ9YzKGp0.IAvE8t9.R7kNfSPSE7gV02IPgdWYGjC",
     "fecha": "2026-06-01T19:39:37.152Z"
+  },
+  {
+    "id": "1780346616176",
+    "nombre": "Estudiante IT",
+    "email": "test@universidad.edu.co",
+    "password": "$2b$10$IjXcnK3ahCKxBIFNzjzN..j7FJFEt0Ys.CEbc0EMLTfJF.LkPi4cu",
+    "fecha": "2026-06-01T20:43:36.176Z"
   }
 ]

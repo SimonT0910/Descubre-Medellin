@@ -37,5 +37,31 @@
     "rating": 0,
     "comentarios": [],
     "fecha": "2026-06-01T18:49:43.419Z"
+  },
+  {
+    "id": "1780343170548",
+    "nombre": "lindo",
+    "categoria": "cafe",
+    "descripcion": "blalkal",
+    "ubicacion": "dggsdgsf",
+    "precio": "$",
+    "imagen": "",
+    "usuario": "bry@gmail.com",
+    "rating": 0,
+    "comentarios": [],
+    "fecha": "2026-06-01T19:46:10.548Z"
+  },
+  {
+    "id": "1780346781646",
+    "nombre": "Parque Explora",
+    "categoria": "museo",
+    "descripcion": "Muy lindo el parque explora",
+    "ubicacion": "Zona Norte",
+    "precio": "$",
+    "imagen": "",
+    "usuario": "",
+    "rating": 0,
+    "comentarios": [],
+    "fecha": "2026-06-01T20:46:21.646Z"
   }
 ]
