@@ -24,5 +24,18 @@
     "rating": 0,
     "comentarios": [],
     "fecha": "2024-01-02T00:00:00.000Z"
+  },
+  {
+    "id": "1780339783419",
+    "nombre": "Prueba con token",
+    "categoria": "parque",
+    "descripcion": "Test con autenticación",
+    "ubicacion": "Medellín",
+    "precio": "$",
+    "imagen": "",
+    "usuario": "",
+    "rating": 0,
+    "comentarios": [],
+    "fecha": "2026-06-01T18:49:43.419Z"
   }
 ]
