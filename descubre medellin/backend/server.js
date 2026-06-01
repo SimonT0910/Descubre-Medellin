@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env' });
 
 const lugaresRoutes = require('./routes/lugares');
 const authRoutes = require('./routes/auth');

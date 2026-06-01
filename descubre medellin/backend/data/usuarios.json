@@ -12,5 +12,12 @@
     "email": "simon@test.com",
     "password": "$2b$10$UDvyudHGPDDUzO5O94qDH.av9NZK7zFW3d.by./ZY37Erx88Qm4ti",
     "fecha": "2026-06-01T18:12:16.501Z"
+  },
+  {
+    "id": "1780342777152",
+    "nombre": "Brt",
+    "email": "bry@gmail.com",
+    "password": "$2b$10$vcTq1jM3qDXfmZ9YzKGp0.IAvE8t9.R7kNfSPSE7gV02IPgdWYGjC",
+    "fecha": "2026-06-01T19:39:37.152Z"
   }
 ]
