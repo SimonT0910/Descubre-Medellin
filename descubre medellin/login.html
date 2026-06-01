@@ -85,141 +85,149 @@
         </div>
 
     </main>
-<script>
-    // Redirigir si ya hay sesión activa
-    if (localStorage.getItem('usuarioActivo')) {
-        window.location.href = 'index.html';
-    }
 
-    function mostrarTab(tab) {
-        document.getElementById('formLogin').style.display = tab === 'login' ? 'flex' : 'none';
-        document.getElementById('formRegister').style.display = tab === 'register' ? 'flex' : 'none';
-        document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
-        document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
-    }
+    <script>
 
-    function togglePass(inputId, btn) {
-        const input = document.getElementById(inputId);
-        if (input.type === 'password') {
-            input.type = 'text';
-            btn.textContent = '🙈';
-        } else {
-            input.type = 'password';
-            btn.textContent = '👁';
+        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("usuarioActivo");
+
+        if (
+            token &&
+            token !== "undefined" &&
+            token !== "null" &&
+            user
+        ) {
+            window.location.href = "index.html";
         }
-    }
-
-    async function registrarUsuario() {
-        const nombre = document.getElementById('regNombre').value.trim();
-        const email = document.getElementById('regEmail').value.trim().toLowerCase();
-        const pass = document.getElementById('regPassword').value;
-        const pass2 = document.getElementById('regPassword2').value;
-
-        ['errorRegNombre', 'errorRegEmail', 'errorRegPass', 'errorRegPass2', 'errorRegGlobal'].forEach(id => {
-            document.getElementById(id).textContent = '';
-        });
-        ['regNombre', 'regEmail', 'regPassword', 'regPassword2'].forEach(id => {
-            document.getElementById(id).classList.remove('input-error');
-        });
-
-        let valido = true;
-
-        if (!nombre) {
-            document.getElementById('errorRegNombre').textContent = 'El nombre es obligatorio.';
-            document.getElementById('regNombre').classList.add('input-error');
-            valido = false;
+        
+        function mostrarTab(tab) {
+            document.getElementById('formLogin').style.display = tab === 'login' ? 'flex' : 'none';
+            document.getElementById('formRegister').style.display = tab === 'register' ? 'flex' : 'none';
+            document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+            document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
         }
-        if (!email || !email.includes('@')) {
-            document.getElementById('errorRegEmail').textContent = 'Ingresa un correo válido.';
-            document.getElementById('regEmail').classList.add('input-error');
-            valido = false;
-        }
-        if (pass.length < 6) {
-            document.getElementById('errorRegPass').textContent = 'Mínimo 6 caracteres.';
-            document.getElementById('regPassword').classList.add('input-error');
-            valido = false;
-        }
-        if (pass !== pass2) {
-            document.getElementById('errorRegPass2').textContent = 'Las contraseñas no coinciden.';
-            document.getElementById('regPassword2').classList.add('input-error');
-            valido = false;
-        }
-        if (!valido) return;
 
-        try {
-            const res = await fetch('http://localhost:3000/api/auth/registro', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nombre, email, password: pass })
+        function togglePass(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁';
+            }
+        }
+
+
+        async function registrarUsuario() {
+            const nombre = document.getElementById('regNombre').value.trim();
+            const email = document.getElementById('regEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('regPassword').value;
+            const pass2 = document.getElementById('regPassword2').value;
+
+            // Validaciones (déjalas como las tienes)
+            ['errorRegNombre', 'errorRegEmail', 'errorRegPass', 'errorRegPass2', 'errorRegGlobal'].forEach(id => {
+                document.getElementById(id).textContent = '';
             });
 
-            const data = await res.json();
+            let valido = true;
 
-            if (!res.ok) {
-                document.getElementById('errorRegGlobal').textContent = data.error || 'Error al registrarse.';
-                return;
+            if (!nombre) {
+                document.getElementById('errorRegNombre').textContent = 'El nombre es obligatorio.';
+                valido = false;
+            }
+            if (!email || !email.includes('@')) {
+                document.getElementById('errorRegEmail').textContent = 'Correo inválido.';
+                valido = false;
+            }
+            if (pass.length < 6) {
+                document.getElementById('errorRegPass').textContent = 'Mínimo 6 caracteres.';
+                valido = false;
+            }
+            if (pass !== pass2) {
+                document.getElementById('errorRegPass2').textContent = 'No coinciden.';
+                valido = false;
             }
 
-            // Login automático después del registro
-            await iniciarSesionConDatos(email, pass);
+            if (!valido) return;
 
-        } catch (err) {
-            document.getElementById('errorRegGlobal').textContent = 'No se pudo conectar con el servidor.';
+            try {
+                const res = await fetch("http://localhost:3000/api/auth/registro", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ nombre, email, password: pass })
+                });
+                const data = await res.json();
+                
+                if (!res.ok) {
+                    document.getElementById('errorRegGlobal').textContent = data.message || "Error en registro";
+                    return;
+                }
+                alert("Registro exitoso");
+
+                document.getElementById('regNombre').value = "";
+                document.getElementById('regEmail').value = "";
+                document.getElementById('regPassword').value = "";
+                document.getElementById('regPassword2').value = "";
+
+                mostrarTab('login');
+
+            } catch (error) {
+                document.getElementById('errorRegGlobal').textContent = "Error de conexión";
+            }
         }
-    }
 
-    async function iniciarSesion() {
-        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-        const pass = document.getElementById('loginPassword').value;
+        async function iniciarSesion() {
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('loginPassword').value;
 
-        ['errorLoginEmail', 'errorLoginPass', 'errorLoginGlobal'].forEach(id => {
-            document.getElementById(id).textContent = '';
-        });
-        ['loginEmail', 'loginPassword'].forEach(id => {
-            document.getElementById(id).classList.remove('input-error');
-        });
-
-        let valido = true;
-
-        if (!email) {
-            document.getElementById('errorLoginEmail').textContent = 'Ingresa tu correo.';
-            document.getElementById('loginEmail').classList.add('input-error');
-            valido = false;
-        }
-        if (!pass) {
-            document.getElementById('errorLoginPass').textContent = 'Ingresa tu contraseña.';
-            document.getElementById('loginPassword').classList.add('input-error');
-            valido = false;
-        }
-        if (!valido) return;
-
-        await iniciarSesionConDatos(email, pass);
-    }
-
-    async function iniciarSesionConDatos(email, pass) {
-        try {
-            const res = await fetch('http://localhost:3000/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password: pass })
+            ['errorLoginEmail', 'errorLoginPass', 'errorLoginGlobal'].forEach(id => {
+                document.getElementById(id).textContent = '';
             });
 
-            const data = await res.json();
+            let valido = true;
 
-            if (!res.ok) {
-                document.getElementById('errorLoginGlobal').textContent = data.error || 'Correo o contraseña incorrectos.';
-                return;
+            if (!email) {
+                document.getElementById('errorLoginEmail').textContent = 'Ingresa tu correo.';
+                valido = false;
+            }
+            if (!pass) {
+                document.getElementById('errorLoginPass').textContent = 'Ingresa tu contraseña.';
+                valido = false;
             }
 
-            // Guardar token y usuario en localStorage
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('usuarioActivo', JSON.stringify(data.usuario));
-            window.location.href = 'index.html';
+            if (!valido) return;
 
-        } catch (err) {
-            document.getElementById('errorLoginGlobal').textContent = 'No se pudo conectar con el servidor.';
+            try {
+                const res = await fetch("http://localhost:3000/api/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ email, password: pass })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    document.getElementById('errorLoginGlobal').textContent = data.message || "Credenciales incorrectas";
+                    return;
+                }
+
+                //Guarda token
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("usuarioActivo", JSON.stringify(data.usuario));
+
+                window.location.href = "index.html";
+
+
+            } catch (error) {
+                document.getElementById('errorLoginGlobal').textContent = "Error de conexión";
+            }
         }
-    }
-</script>
+    </script>
+
 </body>
 </html>

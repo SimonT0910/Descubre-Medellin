@@ -63,5 +63,18 @@
     "rating": 0,
     "comentarios": [],
     "fecha": "2026-06-01T20:46:21.646Z"
+  },
+  {
+    "id": "1780354530158",
+    "nombre": "cafe la seriedad",
+    "categoria": "cafe",
+    "descripcion": "vuelvase serio y tome un cafe",
+    "ubicacion": "la santa seriedad",
+    "precio": "$",
+    "imagen": "https://images.adsttc.com/media/images/5ca7/72a6/284d/d153/3000/01f2/medium_jpg/feature-_UC8A1822.jpg?1554477709",
+    "usuario": "juan@gmail.com",
+    "rating": 0,
+    "comentarios": [],
+    "fecha": "2026-06-01T22:55:30.159Z"
   }
 ]
