@@ -1,0 +1,67 @@
+[
+  {
+    "id": "1",
+    "nombre": "Parque Lleras",
+    "categoria": "parque",
+    "descripcion": "Zona de entretenimiento popular en El Poblado.",
+    "ubicacion": "El Poblado, Medellín",
+    "precio": "$$$",
+    "imagen": "https://visitarmedellin.com/wp-content/uploads/2023/01/Portada-Parque-Lleras.jpg",
+    "usuario": "",
+    "rating": 0,
+    "comentarios": [],
+    "fecha": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "nombre": "Restaurante Hacienda",
+    "categoria": "restaurante",
+    "descripcion": "Comida típica colombiana en un ambiente acogedor.",
+    "ubicacion": "Laureles, Medellín",
+    "precio": "$$",
+    "imagen": "https://haciendaorigen.com/wp-content/uploads/2024/10/5-1024x1024.jpg",
+    "usuario": "",
+    "rating": 0,
+    "comentarios": [],
+    "fecha": "2024-01-02T00:00:00.000Z"
+  },
+  {
+    "id": "1780339783419",
+    "nombre": "Prueba con token",
+    "categoria": "parque",
+    "descripcion": "Test con autenticación",
+    "ubicacion": "Medellín",
+    "precio": "$",
+    "imagen": "",
+    "usuario": "",
+    "rating": 0,
+    "comentarios": [],
+    "fecha": "2026-06-01T18:49:43.419Z"
+  },
+  {
+    "id": "1780343170548",
+    "nombre": "lindo",
+    "categoria": "cafe",
+    "descripcion": "blalkal",
+    "ubicacion": "dggsdgsf",
+    "precio": "$",
+    "imagen": "",
+    "usuario": "bry@gmail.com",
+    "rating": 0,
+    "comentarios": [],
+    "fecha": "2026-06-01T19:46:10.548Z"
+  },
+  {
+    "id": "1780346781646",
+    "nombre": "Parque Explora",
+    "categoria": "museo",
+    "descripcion": "Muy lindo el parque explora",
+    "ubicacion": "Zona Norte",
+    "precio": "$",
+    "imagen": "",
+    "usuario": "",
+    "rating": 0,
+    "comentarios": [],
+    "fecha": "2026-06-01T20:46:21.646Z"
+  }
+]
