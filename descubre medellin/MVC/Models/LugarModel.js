@@ -42,7 +42,6 @@ export async function guardarNuevoLugar(datos) {
 
 export async function actualizarLugar(id, datos) {
     const token = localStorage.getItem("token");
-
     const res = await fetch(`${API_URL}/lugares/${id}`, {
         method: "PUT",
         headers: {
@@ -51,14 +50,8 @@ export async function actualizarLugar(id, datos) {
         },
         body: JSON.stringify(datos)
     });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-        throw new Error(data.message || "Error al editar lugar");
-    }
-
-    return data;
+    if (!res.ok) throw new Error("Error al actualizar lugar");
+    return await res.json();
 }
 
 export async function agregarComentario(id, comentario) {
