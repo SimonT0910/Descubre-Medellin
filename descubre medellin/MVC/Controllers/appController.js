@@ -3,7 +3,8 @@ import {
     guardarNuevoLugar,
     actualizarLugar,
     agregarComentario,
-    obtenerFavoritos, 
+    obtenerFavoritos,
+    eliminarLugar, 
     toggleFavorito
 } from "../Models/lugarModel.js";
 import { 
@@ -195,6 +196,8 @@ function configurarModalEditar() {
     const modal = document.getElementById("modalEditar");
     if (!modal) return;
 
+    document.getElementById("btnEliminarLugar")?.addEventListener("click", eliminarLugarHandler);
+
     document.getElementById("editarClose")?.addEventListener("click", () => {
         modal.classList.remove("active");
         document.body.style.overflow = "";
@@ -255,15 +258,27 @@ async function guardarNuevoLugarHandler() {
         return;
     }
 
+    if (descripcion.trim().length < 10) {
+    alert("La descripción debe tener al menos 10 caracteres");
+    return;
+    }
+
     const user = JSON.parse(localStorage.getItem("usuarioActivo"));
 
     try {
-        await guardarNuevoLugar({ nombre, categoria, descripcion, ubicacion, precio, imagen, usuario: user?.email });
+        await guardarNuevoLugar({ nombre, categoria, descripcion, ubicacion, precio, imagen});
         cerrarModalPublicar();
         await cargarLugares();
     } catch (err) {
-        alert("Error al publicar el lugar. ¿Está el servidor corriendo?");
-    }
+    console.error(err);
+
+    if (err.message.includes("401")) {
+        alert("Sesión expirada, vuelve a iniciar sesión");
+        cerrarSesion();
+    } else {
+        alert("Error al publicar el lugar");
+      }
+    }   
 }
 
 async function cargarLugares() {
@@ -423,6 +438,28 @@ async function guardarEdicionLugarHandler() {
         alert("Error al guardar los cambios");
     }
 }
+
+async function eliminarLugarHandler() {
+    const id = document.getElementById("editarId").value;
+
+    const confirmar = confirm("¿Seguro que quieres eliminar este lugar?");
+    if (!confirmar) return;
+
+    try {
+        await eliminarLugar(id);
+
+        document.getElementById("modalEditar").classList.remove("active");
+        document.body.style.overflow = "";
+
+        await cargarLugares();
+
+        alert("Lugar eliminado correctamente");
+    } catch (err) {
+        alert("Error al eliminar el lugar");
+        console.error(err);
+    }
+}
+
 
 function cerrarSesion() {
     localStorage.removeItem("usuarioActivo");

@@ -65,16 +65,29 @@
     "fecha": "2026-06-01T20:46:21.646Z"
   },
   {
-    "id": "1780354530158",
-    "nombre": "cafe la seriedad",
+    "id": "1780436727379",
+    "nombre": "cafe seriedad",
     "categoria": "cafe",
-    "descripcion": "vuelvase serio y tome un cafe",
+    "descripcion": "tomese un cafe y sea serio",
     "ubicacion": "la santa seriedad",
     "precio": "$",
-    "imagen": "https://images.adsttc.com/media/images/5ca7/72a6/284d/d153/3000/01f2/medium_jpg/feature-_UC8A1822.jpg?1554477709",
-    "usuario": "juan@gmail.com",
+    "imagen": "https://ingenieriademenu.com/wp-content/uploads/2022/04/Como-decorar-una-cafeteria-pequena-con-poco-dinero.jpg",
+    "usuario": "",
     "rating": 0,
     "comentarios": [],
-    "fecha": "2026-06-01T22:55:30.159Z"
+    "fecha": "2026-06-02T21:45:27.380Z"
+  },
+  {
+    "id": "1780436856325",
+    "nombre": "bar la esperanza",
+    "categoria": "bar",
+    "descripcion": "bar para pasar el rato",
+    "ubicacion": "la esquinita",
+    "precio": "$$",
+    "imagen": "",
+    "usuario": "",
+    "rating": 0,
+    "comentarios": [],
+    "fecha": "2026-06-02T21:47:36.326Z"
   }
 ]
