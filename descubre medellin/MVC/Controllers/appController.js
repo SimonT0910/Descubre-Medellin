@@ -254,12 +254,12 @@ async function guardarNuevoLugarHandler() {
     const imagen = document.getElementById("inputImagen").value.trim();
 
     if (!nombre || !categoria || !descripcion || !ubicacion || !precio) {
-        mostrarMensaje("Completa todos los campos obligatorios");
+        mostrarMensaje("Completa todos los campos obligatorios", "error");
         return;
     }
 
     if (descripcion.trim().length < 10) {
-    mostrarMensaje("La descripción debe tener al menos 10 caracteres");
+    mostrarMensaje("La descripción debe tener al menos 10 caracteres", "error");
     return;
     }
 
@@ -427,7 +427,7 @@ async function guardarEdicionLugarHandler() {
     const imagen = document.getElementById("editarImagen").value.trim();
 
     if (!nombre || !categoria || !descripcion || !ubicacion || !precio) {
-        mostrarMensaje("Completa todos los campos obligatorios");
+        mostrarMensaje("Completa todos los campos obligatorios", "error");
         return;
     }
 
@@ -477,7 +477,7 @@ function verificarSesion() {
     }
 }
 
-window.mostrarMensaje = function (texto, tipo = "Ok") {
+function mostrarMensaje (texto, tipo = "Ok") {
   const div = document.getElementById("mensaje");
 
   div.textContent = texto;

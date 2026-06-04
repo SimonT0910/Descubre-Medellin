@@ -33,5 +33,12 @@
     "email": "juan@gmail.com",
     "password": "$2b$10$FIa4/S.3/6XnyxTSltVhb.N9FGoCZxudPB2AVM/Q0OfX05gDSfh1G",
     "fecha": "2026-06-01T22:24:22.138Z"
+  },
+  {
+    "id": "1780540578404",
+    "nombre": "si",
+    "email": "si@gmail.com",
+    "password": "$2b$10$ZhPQg8eykjGqoW/oTEVHM.qeAlZz1n1uwGd8t0sEZbF356rnXWP8C",
+    "fecha": "2026-06-04T02:36:18.405Z"
   }
 ]
