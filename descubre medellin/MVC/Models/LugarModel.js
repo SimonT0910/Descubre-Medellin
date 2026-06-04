@@ -2,13 +2,24 @@ const API_URL = "http://localhost:3000/api";
 
 // ---------------- LUGARES ----------------
 export async function obtenerLugares() {
-    const res = await fetch(`${API_URL}/lugares`);
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(`${API_URL}/lugares`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
     if (!res.ok) throw new Error("Error al obtener lugares");
     return await res.json();
 }
 
 export async function guardarNuevoLugar(datos) {
     const token = localStorage.getItem("token");
+
+    console.log("TOKEN:", token);
+    console.log("DATA ENVIADA:", datos);
+
     const res = await fetch(`${API_URL}/lugares`, {
         method: "POST",
         headers: {
@@ -17,8 +28,16 @@ export async function guardarNuevoLugar(datos) {
         },
         body: JSON.stringify(datos)
     });
-    if (!res.ok) throw new Error("Error al crear lugar");
-    return await res.json();
+
+    const responseData = await res.json(); // 👈 guardamos respuesta
+
+    console.log("RESPUESTA BACKEND:", responseData);
+
+    if (!res.ok) {
+        throw new Error(responseData.message || "Error al crear lugar");
+    }
+
+    return responseData;
 }
 
 export async function actualizarLugar(id, datos) {
@@ -60,4 +79,18 @@ export function toggleFavorito(id) {
     favs = favs.includes(id) ? favs.filter(f => f !== id) : [...favs, id];
     localStorage.setItem(key, JSON.stringify(favs));
     return favs;
+}
+
+// Eliminar lugar
+export async function eliminarLugar(id) {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(`${API_URL}/lugares/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    if (!res.ok) throw new Error("Error al eliminar lugar");
 }

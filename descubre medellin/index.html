@@ -7,6 +7,7 @@
 </head>
 <body>
  
+    <div id="mensaje"></div>
     <header class="main-header">
         <div class="container header-content">
             <div class="logo">
@@ -72,6 +73,15 @@
         </div>
  
         <p id="contadorLugares" class="contador">Cargando lugares...</p>
+
+        <!-- MENSAJES -->
+        <div id="mensaje" style="display:none;"></div>
+
+        <!-- LOADER -->
+        <div id="loader" style="display:none;">
+        ⏳ Cargando...
+        </div>
+
         <section class="places-grid" id="placesGrid"></section>
  
     </main>
@@ -240,6 +250,7 @@
                     </div>
                 </div>
                 <div class="form-actions">
+                    <button class="btn-danger" id="btnEliminarLugar">Eliminar</button>
                     <button class="btn-cancel" id="editarCancelar">Cancelar</button>
                     <button class="btn-primary" id="editarGuardar">Guardar cambios</button>
                 </div>
@@ -262,9 +273,7 @@
             </div>
         </div>
 
-        <script type="module" src="MVC/main.js"></script>
     </body>
-    </html>
  
 </body>
 </html>

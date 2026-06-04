@@ -3,7 +3,8 @@ import {
     guardarNuevoLugar,
     actualizarLugar,
     agregarComentario,
-    obtenerFavoritos, 
+    obtenerFavoritos,
+    eliminarLugar, 
     toggleFavorito
 } from "../Models/lugarModel.js";
 import { 
@@ -195,6 +196,8 @@ function configurarModalEditar() {
     const modal = document.getElementById("modalEditar");
     if (!modal) return;
 
+    document.getElementById("btnEliminarLugar")?.addEventListener("click", eliminarLugarHandler);
+
     document.getElementById("editarClose")?.addEventListener("click", () => {
         modal.classList.remove("active");
         document.body.style.overflow = "";
@@ -251,19 +254,32 @@ async function guardarNuevoLugarHandler() {
     const imagen = document.getElementById("inputImagen").value.trim();
 
     if (!nombre || !categoria || !descripcion || !ubicacion || !precio) {
-        alert("Completa todos los campos obligatorios");
+        mostrarMensaje("Completa todos los campos obligatorios", "error");
         return;
+    }
+
+    if (descripcion.trim().length < 10) {
+    mostrarMensaje("La descripción debe tener al menos 10 caracteres", "error");
+    return;
     }
 
     const user = JSON.parse(localStorage.getItem("usuarioActivo"));
 
     try {
-        await guardarNuevoLugar({ nombre, categoria, descripcion, ubicacion, precio, imagen, usuario: user?.email });
+        await guardarNuevoLugar({ nombre, categoria, descripcion, ubicacion, precio, imagen, usuario: user?.email});
         cerrarModalPublicar();
         await cargarLugares();
+        mostrarMensaje("Lugar publicado correctamente");
     } catch (err) {
-        alert("Error al publicar el lugar. ¿Está el servidor corriendo?");
+    console.error(err);
+
+    if (err.message.includes("Sesión")) {
+        mostrarMensaje("Sesión expirada", "error");
+        cerrarSesion();
+    } else {
+        mostrarMensaje("Error al publicar el lugar", "error");
     }
+    }   
 }
 
 async function cargarLugares() {
@@ -275,6 +291,7 @@ async function cargarLugares() {
         actualizarBadgeFavoritos(favoritos.length);
     } catch (err) {
         document.getElementById("contadorLugares").textContent = "Error al cargar lugares";
+        mostrarMensaje("Error de conexión", "error");
         console.error(err);
     }
 }
@@ -353,7 +370,7 @@ async function publicarComentario() {
     const autor = document.getElementById("comentarioAutor").value.trim();
     const texto = document.getElementById("comentarioTexto").value.trim();
 
-    if (!texto) { alert("Escribe un comentario"); return; }
+    if (!texto) { mostrarMensaje("Escribe un comentario"); return; }
 
     try {
         const nuevoComentario = await agregarComentario(lugarActualEnDetalle.id, {
@@ -368,17 +385,17 @@ async function publicarComentario() {
         document.getElementById("comentarioAutor").value = "";
         document.getElementById("comentarioTexto").value = "";
         document.getElementById("charComentario").textContent = "0 / 300";
-
+        mostrarMensaje("Comentario publicado correctamente");
         await cargarLugares();
     } catch (err) {
-        alert("Error al publicar el comentario");
+        mostrarMensaje("Error al publicar el comentario", "error");
     }
 }
 
 function abrirModalEditar(lugar) {
     const user = JSON.parse(localStorage.getItem("usuarioActivo"));
     if (!user || lugar.usuario !== user.email) {
-        alert("No tienes permiso para editar este lugar");
+        mostrarMensaje("No tienes permiso para editar este lugar");
         return;
     }
 
@@ -410,7 +427,7 @@ async function guardarEdicionLugarHandler() {
     const imagen = document.getElementById("editarImagen").value.trim();
 
     if (!nombre || !categoria || !descripcion || !ubicacion || !precio) {
-        alert("Completa todos los campos obligatorios");
+        mostrarMensaje("Completa todos los campos obligatorios", "error");
         return;
     }
 
@@ -419,10 +436,34 @@ async function guardarEdicionLugarHandler() {
         document.getElementById("modalEditar").classList.remove("active");
         document.body.style.overflow = "";
         await cargarLugares();
+        mostrarMensaje("Cambios guardados correctamente");
+        
     } catch (err) {
-        alert("Error al guardar los cambios");
+        mostrarMensaje("Error al guardar los cambios", "error");
     }
 }
+
+async function eliminarLugarHandler() {
+    const id = document.getElementById("editarId").value;
+
+    const confirmar = confirm("¿Seguro que quieres eliminar este lugar?");
+    if (!confirmar) return;
+
+    try {
+        await eliminarLugar(id);
+
+        document.getElementById("modalEditar").classList.remove("active");
+        document.body.style.overflow = "";
+
+        await cargarLugares();
+
+        mostrarMensaje("Lugar eliminado correctamente");
+    } catch (err) {
+        mostrarMensaje("Error al eliminar el lugar", "error");
+        console.error(err);
+    }
+}
+
 
 function cerrarSesion() {
     localStorage.removeItem("usuarioActivo");
@@ -434,4 +475,30 @@ function verificarSesion() {
     if (!localStorage.getItem("usuarioActivo")) {
         window.location.href = "login.html";
     }
+}
+
+function mostrarMensaje (texto, tipo = "Ok") {
+  const div = document.getElementById("mensaje");
+
+  div.textContent = texto;
+
+  div.style.position = "fixed";
+  div.style.top = "20px";
+  div.style.right = "20px";
+  div.style.zIndex = "9999";
+
+  div.style.display = "block";
+  div.style.padding = "10px";
+  div.style.borderRadius = "5px";
+  div.style.color = "white";
+
+  if (tipo === "error") {
+    div.style.backgroundColor = "#e74c3c";
+  } else {
+    div.style.backgroundColor = "#2ecc71";
+  }
+
+  setTimeout(() => {
+    div.style.display = "none";
+  }, 3000);
 }

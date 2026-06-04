@@ -26,42 +26,23 @@
     "fecha": "2024-01-02T00:00:00.000Z"
   },
   {
-    "id": "1780339783419",
-    "nombre": "Prueba con token",
-    "categoria": "parque",
-    "descripcion": "Test con autenticación",
-    "ubicacion": "Medellín",
-    "precio": "$",
-    "imagen": "",
-    "usuario": "",
-    "rating": 0,
-    "comentarios": [],
-    "fecha": "2026-06-01T18:49:43.419Z"
-  },
-  {
-    "id": "1780343170548",
-    "nombre": "lindo",
+    "id": "1780438967830",
+    "nombre": "cafe la seriedad",
     "categoria": "cafe",
-    "descripcion": "blalkal",
-    "ubicacion": "dggsdgsf",
+    "descripcion": "tomese un cafe y sea serio",
+    "ubicacion": "la santa seriedad",
     "precio": "$",
-    "imagen": "",
-    "usuario": "bry@gmail.com",
+    "imagen": "https://ingenieriademenu.com/wp-content/uploads/2022/04/Como-decorar-una-cafeteria-pequena-con-poco-dinero.jpg",
+    "usuario": "juan@gmail.com",
     "rating": 0,
-    "comentarios": [],
-    "fecha": "2026-06-01T19:46:10.548Z"
-  },
-  {
-    "id": "1780346781646",
-    "nombre": "Parque Explora",
-    "categoria": "museo",
-    "descripcion": "Muy lindo el parque explora",
-    "ubicacion": "Zona Norte",
-    "precio": "$",
-    "imagen": "",
-    "usuario": "",
-    "rating": 0,
-    "comentarios": [],
-    "fecha": "2026-06-01T20:46:21.646Z"
+    "comentarios": [
+      {
+        "id": "1780441637025",
+        "autor": "juan",
+        "texto": "que seriedad se maneja aqui",
+        "fecha": "02 de jun de 2026"
+      }
+    ],
+    "fecha": "2026-06-02T22:22:47.831Z"
   }
 ]

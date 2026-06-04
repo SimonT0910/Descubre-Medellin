@@ -74,7 +74,7 @@ exports.create = (req, res) => {
         guardarLugares(lugares);
         res.status(201).json(nuevoLugar);
     } catch (err) {
-        res.status(500).json({ error: 'Error al crear el lugar' });
+        res.status(500).json({ error: 'Error al crear el lugar en el servidor' });
     }
 };
 
