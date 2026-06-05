@@ -20,7 +20,7 @@ body { margin: 0; background: linear-gradient(135deg, #020617, #0f172a, #1e293b,
 /* LOGO */
 .logo { display: flex; flex-direction: column; color: var(--text); }
 .logo-top { display: flex; align-items: center; gap: 8px; }
-.logo-top img { width: 28px; height: 28px; }
+.logo-top img { width: 88px; height: 88px; }
 .logo h1 { font-size: 1.4rem; color: var(--text); }
 .logo-subtitle { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
 
