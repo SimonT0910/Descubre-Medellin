@@ -1,173 +1,126 @@
-Proyecto: Descubre Medellín:
+# Descubre Medellín
+
 Blog interactivo de lugares del Valle de Aburrá
 
-Descripción general:
-Descubre Medellín es una pagina web tipo blog/red social donde los usuarios pueden descubrir, publicar y compartir lugares interesantes del área metropolitana del Valle de Aburrá.
-La plataforma permite:
--	Buscar lugares por nombre o descripción.
--	Filtrar por categorías.
--	Filtrar por rango de precio.
--	Ver detalles completos de un lugar.
--	Calificar y comentar.
--	Clasificar en favoritos.
--	Registrarse e iniciar sesión.
--	Publicar nuevos lugares.
+## Descripción general
 
-Arquitectura del sistema:
+Descubre Medellín es una plataforma web tipo blog/red social donde los usuarios pueden descubrir, publicar y compartir lugares interesantes del área metropolitana del Valle de Aburrá.
+
+### Funcionalidades principales
+
+- Buscar lugares por nombre o descripción
+- Filtrar por categorías
+- Filtrar por rango de precio
+- Ver detalles completos de un lugar
+- Comentar lugares
+- Guardar lugares como favoritos (almacenados en el navegador)
+- Registrarse e iniciar sesión
+- Publicar nuevos lugares
+- Editar y eliminar lugares propios
+
+## Integrantes
+
+- Valentina Cano Meneses
+- Simón Tobón Ospina
+- Juan José Flores Cardona
+- Brahyan Sánchez Hernández
+
+## Stack tecnológico
+
+| Capa | Tecnología elegida | Justificación |
+|------|-------------------|---------------|
+| Frontend | HTML, CSS, JavaScript (MVC) | Sin frameworks, separación clara de responsabilidades |
+| Backend | Node.js + Express | API REST rápida y coherente con lo visto en clase |
+| Persistencia | Archivos JSON | Simplicidad, facilidad para la demo y cumplimiento de requisitos |
+| Autenticación | JWT (jsonwebtoken) | Tokens seguros para proteger endpoints |
+| Despliegue | Netlify + Render (planeado) | Facilidad de demo y planes gratuitos |
+
+## Arquitectura del sistema
+
 El sistema está dividido en 4 capas principales:
-1.	Capa cliente (Front-end)
-2.	API HTTP
-3.	Back-end
-4.	Base de datos
 
-1. Capa cliente – Navegador (Front-end):
-Representa la interfaz con la que interactúa el usuario desde el navegador.
-Componentes principales:
--	Inicio (Home).
--	Vista lista de lugares.
--	Vista detalle de lugar.
--	Pagina publicar lugar.
--	Login.
--	Registro.
--	Perfil de Usuario.
--	Vista de lugares favoritos.
-Función:
-Permite al usuario:
--	Buscar lugares.
--	Aplicar filtros (categoría y precio).
--	Ver detalles completos.
--	Registrarse e iniciar sesión.
--	Publicar nuevos lugares.
--	Ver comentarios y calificaciones.
--	Clasificar sus lugares favoritos.
+1. **Capa cliente (Frontend):** Navegador con Live Server (puerto 5500). Maneja la interfaz de usuario, el almacenamiento local (favoritos, token JWT, usuario activo) y la comunicación con el backend mediante fetch.
 
-2. API HTTP:
-Esta capa gestiona la comunicación entre el front-end y el back-end.
-Endpoints principales:
-Lugares:
--	GET/lugares
--	GET /lugares/:id
--	POST /lugares
--	GET /lugares?categoria=
--	 GET /lugares?precioMin=&precioMax=
+2. **API HTTP:** Capa de comunicación que gestiona las peticiones entre frontend y backend, validando datos y retornando respuestas en JSON.
 
-Comentarios:
--	GET /lugares/:id/comentarios
--	POST /lugares/:id/comentarios
-Autenticación:
--	POST /auth/register
--	POST /auth/login
-Favoritos:
--	GET /lugares/:id/favoritos
--	POST /lugares/:id/favoritos
-Función:
--	Recibir solicitudes del navegador.
--	Validar datos.
--	Redirigir la solicitud al controlador correspondiente.
--	Retornar la respuesta en formato JSON.
+3. **Backend (Node.js + Express):** Corre en el puerto 3000. Contiene las rutas (auth y lugares), los controladores (authController, lugaresController) y el middleware de seguridad (authMiddleware) que protege los endpoints con JWT.
 
-3. Back-end:
-Aquí se encuentra la lógica de negocio del sistema.
-Controladores principales:
--	Controlador Lugares.
--	Controlador Comentarios.
--	Controlador Auth.
-Todos utilizan servicios internos como:
--	Servicio Lugares.
--	Servicio Usuarios.
--	Servicio Comentarios.
-Servicio de contenido (Lógica de negocio):
-Centraliza la lógica para:
--	Crear lugares.
--	Validar datos.
--	Filtrar por categoría.
--	Calcular promedio de calificaciones.
--	Gestionar autenticación.
--	Manejar comentarios.
-4. Base de datos: 
-Contiene la información almacenada del sistema:
-Tablas/Colecciones:
--	Usuarios.
--	Lugares.
--	Comentarios.
--	Calificaciones.
--	Favoritos.
-Función:
--	Guardar la información.
--	Relacionar usuarios con lugares publicados.
--	Relacionar comentarios con lugares.
--	Guardar puntuaciones.
--	Clasificar lugares favoritos.
+4. **Persistencia (Archivos JSON):** Los datos se guardan en `backend/data/usuarios.json` y `backend/data/lugares.json`. Los comentarios se almacenan dentro de cada lugar en el array de comentarios.
 
-Flujo principal del sistema:
-Flujo cuando un usuario inicia sesión:
-1.	El usuario entra a la pagina de Login desde el navegador.
-2.	El front-end muestra el formulario de inicio de sesión (correo electrónico o usuario y contraseña).
-3.	El usuario ingresa sus credenciales y presiona el botón “Iniciar Sesión”.
-4.	El navegador realiza una petición POST /auth/login enviando email + contraseña o usuario + contraseña.
-5.	La API redirige la solicitud al Controlador Auth.
-6.	El controlador utiliza el Servicio Usuarios para validar las credenciales.
-7.	El servicio consulta la base de datos en la tabla Usuarios para verificar si existe el usuario.
-8.	Si las credenciales son correctas, el servidor genera una sesión o token y responde con esta 200 OK.
-9.	El front-end recibe la respuesta y redirige al usuario al Inicio con la sesión activa.
-10.	Si las credenciales son incorrectas, el servidor responde con error 401 y el front-end muestra un mensaje de “Credenciales inválidas”.
-Flujo cuando un usuario se registra:
-1.	El usuario entra a la pagina de registro desde el navegador.
-2.	El front-end muestra el formulario con nombre, correo electrónico y contraseña.
-3.	El usuario completa los datos y presiona el botón “Registrarse”.
-4.	El navegador realiza una petición POST /auth/register enviando nombre, email y contraseña.
-5.	La API redirige la solicitud al Controlador Auth.
-6.	El controlador utiliza el Servicio Usuarios para validar la información recibida.
-7.	El servicio verifica en la base de datos si el correo o usuario ya existen.
-8.	Si no existe, el servicio guarda el nuevo usuario en la tabla Usuarios.
-9.	El servidor responde con estado 201 Created confirmando que el registro fue exitoso.
-10.	 El front-end recibe la respuesta y redirige al usuario a la pagina de Login o al Inicio con sesión iniciada.
-11.	 Si el correo ya esta registrado, el servidor responde con error 400 y el front-end muestra un mensaje indicando que el usuario ya existe.
+### Componentes del frontend
 
-Flujo cuando un usuario consulta un lugar:
-1.	El usuario entra al inicio desde el navegador.
-2.	El front-end muestra la lista de lugares.
-3.	El navegador realiza una petición GET /lugares.
-4.	La API redirige la solicitud al Controlador Lugares.
-5.	El controlador utiliza el Servicio Lugares.
-6.	El servicio consulta la base de datos.
-7.	Los datos regresan en formato JSON.
-8.	El front-end renderiza las tarjetas con la información.
+- Inicio (Home)
+- Vista lista de lugares
+- Vista detalle de lugar
+- Página publicar lugar
+- Login y Registro
+- Vista de favoritos (desde localStorage)
 
-Flujo cuando un usuario publica un lugar:
-1.	El usuario inicia sesión.
-2.	Completa el formulario de Publicar Lugar.
-3.	El front-end envía una petición POST /lugares.
-4.	La API valida los datos.
-5.	El Controlador Lugares procesa la solicitud.
-6.	El servicio Lugares guarda el lugar en la base de datos.
-7.	Se retorna una respuesta de éxito.
-8.	El lugar aparece en el listado general.
+### Endpoints principales de la API
 
-Flujo cuando un usuario comenta:
-1.	El usuario entra al detalle de un lugar.
-2.	Escribe un comentario.
-3.	El front-end envía POST /lugares/:id/comentarios.
-4.	El back-end guarda el comentario.
-5.	Se actualiza la lista de comentarios.
+| Método | Endpoint | Descripción | Autenticación |
+|--------|----------|-------------|---------------|
+| POST | /api/auth/registro | Registrar un nuevo usuario | No |
+| POST | /api/auth/login | Iniciar sesión y obtener token JWT | No |
+| GET | /api/lugares | Obtener todos los lugares | No |
+| GET | /api/lugares/:id | Obtener un lugar por ID | No |
+| POST | /api/lugares | Crear un nuevo lugar | Sí (token) |
+| PUT | /api/lugares/:id | Actualizar un lugar existente | Sí (token) |
+| DELETE | /api/lugares/:id | Eliminar un lugar | Sí (token) |
+| POST | /api/lugares/:id/comentarios | Agregar un comentario a un lugar | No |
 
-Flujo cuando un usuario guarda un lugar como favorito:
-1.	El usuario inicia sesión en la plataforma.
-2.	El usuario entra al detalle de un lugar o lo visualiza desde la lista principal.
-3.	El usuario presiona el botón “Agregar a Favoritos”.
-4.	El front-end envía una petición POST /lugares/:id/favoritos junto con el token de autenticación del usuario.
-5.	La API recibe la solicitud y la redirige al Controlador Lugares (o Controlador Favoritos si está separado).
-6.	El controlador utiliza el Servicio Usuarios o Servicio Lugares para procesar la acción.
-7.	El servicio valida que el usuario esté autenticado y verifica que el lugar exista en la base de datos.
-8.	El servicio comprueba que el lugar no esté ya guardado como favorito para evitar duplicados.
-9.	Si todo es correcto, se guarda el registro en la tabla Favoritos, relacionando el usuario con el lugar.
-10.	El servidor responde con estado 201 Created confirmando que el lugar fue agregado a favoritos.
-11.	El front-end actualiza la interfaz (por ejemplo, cambia el ícono a “favorito” activo).
-12.	El usuario puede visualizar el lugar guardado en la sección Vista de Lugares Favoritos dentro de su perfil.
+### Flujos principales del sistema
 
-Objetivo del proyecto:
-Crear una plataforma colaborativa para descubrir lugares en Medellín que:
--	Sea clara y organizada.
--	Permita interacción entre usuarios.
--	Tenga separación de responsabilidades por capas.
--	Pueda escalar en el futuro agregando mapas, geolocalización o sistema de favoritos.
+**Inicio de sesión:** El usuario ingresa email y contraseña, el frontend envía POST a `/api/auth/login`, el backend verifica las credenciales en `usuarios.json`, compara la contraseña con bcrypt, genera un token JWT y lo devuelve. El frontend guarda el token y redirige al home.
+
+**Registro de usuario:** El usuario completa el formulario, el frontend envía POST a `/api/auth/registro`, el backend valida los datos, verifica que el email no exista, encripta la contraseña y guarda el usuario en `usuarios.json`.
+
+**Publicar un lugar:** El usuario autenticado completa el formulario, el frontend envía POST a `/api/lugares` con el token JWT en el header, el backend valida el token, valida los datos del lugar y lo guarda en `lugares.json`.
+
+**Comentar un lugar:** El usuario escribe un comentario, el frontend envía POST a `/api/lugares/:id/comentarios`, el backend guarda el comentario dentro del array de comentarios del lugar en `lugares.json`.
+
+**Guardar favoritos:** El usuario hace clic en el botón de favorito, el frontend guarda el ID del lugar en `localStorage` bajo la clave `favoritos_(email del usuario)`. No hay sincronización con el backend.
+
+## Diagramas
+
+Los diagramas del proyecto se encuentran en `docs/diagramas.md`:
+
+- Diagrama Entidad-Relación
+- Diagrama de Arquitectura
+- Diagramas de Secuencia (publicar lugar e iniciar sesión)
+- Diagrama de Despliegue
+
+## Prototipo navegable
+
+El prototipo en Figma está disponible en: [https://www.figma.com/make/dyhB1N7NVmNgG59pVMRYbc/Blog-de-recomendaciones-de-lugares](https://www.figma.com/make/dyhB1N7NVmNgG59pVMRYbc/Blog-de-recomendaciones-de-lugares)
+
+## Cómo ejecutar localmente
+
+### Requisitos previos
+
+- Node.js instalado (versión 18 o superior)
+- Visual Studio Code (recomendado)
+- Extensión Live Server para VS Code
+
+### Instalación y ejecución
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/SimonT0910/Descubre-Medellin.git
+cd Descubre-Medellin
+
+# 2. Entrar a la carpeta del backend e instalar dependencias
+cd "descubre medellin/backend"
+npm install
+
+# 3. Crear archivo .env (usar .env.example como guía)
+# Agregar: JWT_SECRET=tu_clave_secreta
+
+# 4. Iniciar el backend
+npx nodemon server.js
+# Deberías ver: Servidor corriendo en http://localhost:3000
+
+# 5. En otra terminal, abrir el frontend con Live Server
+# Abrir la carpeta "descubre medellin" en VS Code
+# Hacer clic derecho en index.html → "Open with Live Server"
+# El frontend se abrirá en http://localhost:5500
