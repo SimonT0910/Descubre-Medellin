@@ -3,7 +3,7 @@
 
 ---
 
-## 3. Requerimientos Funcionales
+## Requerimientos Funcionales
 
 Los siguientes requerimientos funcionales describen las capacidades que el sistema debe ofrecer a sus usuarios. Cada requerimiento incluye un identificador único, descripción, prioridad y criterios de aceptación verificables.
 
