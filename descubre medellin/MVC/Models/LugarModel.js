@@ -1,4 +1,4 @@
-const API_URL = "https://descubre-medellin-backend-6tpv.onrender.com";
+const API_URL = "https://descubre-medellin-backend-6tpv.onrender.com/api";
 
 // ---------------- LUGARES ----------------
 export async function obtenerLugares() {
