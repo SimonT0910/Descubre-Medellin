@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api";
+const API_URL = "https://descubre-medellin-backend-6tpv.onrender.com";
 
 // ---------------- LUGARES ----------------
 export async function obtenerLugares() {
